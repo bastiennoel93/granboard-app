@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm run test:e2e:*)",
+      "Bash(npx playwright test:*)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}
