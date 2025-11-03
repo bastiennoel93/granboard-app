@@ -15,16 +15,16 @@ Ce dossier contient les tests end-to-end pour l'application Granboard utilisant 
 
 ```bash
 # Exécuter tous les tests E2E
-npm run test:e2e
+pnpm test:e2e
 
 # Exécuter les tests en mode UI (interface graphique)
-npm run test:e2e:ui
+pnpm test:e2e:ui
 
 # Exécuter les tests en mode debug
-npm run test:e2e:debug
+pnpm test:e2e:debug
 
 # Afficher le rapport des derniers tests
-npm run test:e2e:report
+pnpm test:e2e:report
 ```
 
 ### Exécuter un test spécifique
@@ -58,9 +58,9 @@ La configuration se trouve dans `playwright.config.ts` à la racine du projet.
 
 ### Paramètres importants
 
-- **baseURL**: `http://localhost:3000`
+- **baseURL**: `http://localhost:8080`
 - **Navigateurs testés**: Chromium, Firefox, WebKit
-- **webServer**: Lance automatiquement `npm run dev` avant les tests
+- **webServer**: Lance automatiquement `pnpm run dev` avant les tests
 
 ## Écrire de nouveaux tests
 
@@ -104,7 +104,7 @@ test.describe('Feature Name', () => {
 ### Mode debug
 
 ```bash
-npm run test:e2e:debug
+pnpm test:e2e:debug
 ```
 
 Permet de:

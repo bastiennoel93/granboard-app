@@ -5,6 +5,8 @@
 /.pnp
 .pnp.js
 .yarn/install-state.gz
+.pnpm-store/
+.pnpm-debug.log
 
 # testing
 /coverage
@@ -25,6 +27,7 @@
 .DS_Store
 *.pem
 CLAUDE.md
+.claude/
 
 # debug
 npm-debug.log*
@@ -69,7 +72,7 @@ Thumbs.db
 *.swo
 *~
 
-# Package manager lock files (optionnel, décommenter si besoin)
-# package-lock.json
-# yarn.lock
-# pnpm-lock.yaml
+# Package manager lock files
+package-lock.json
+yarn.lock
+# Keep pnpm-lock.yaml in git (recommended for pnpm)
