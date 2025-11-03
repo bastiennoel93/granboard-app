@@ -192,6 +192,7 @@ export default function CricketGame() {
     const customContent = (
       <div className="space-y-3">
         <button
+          data-testid="new-game-button"
           onClick={() => {
             closeDialog();
             handleNewGame();
@@ -201,6 +202,7 @@ export default function CricketGame() {
           {t('cricket.game.newGame')}
         </button>
         <button
+          data-testid="quit-button"
           onClick={() => {
             closeDialog();
             handleQuit();

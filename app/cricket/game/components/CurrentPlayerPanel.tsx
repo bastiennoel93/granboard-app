@@ -45,6 +45,7 @@ export function CurrentPlayerPanel({
         </div>
         <div className="flex items-center gap-3">
           <button
+            data-testid="undo-button"
             onClick={onUndo}
             disabled={!hasHistory}
             className={`px-4 py-2 rounded-lg font-bold text-sm transition-all shadow-lg ${
@@ -57,6 +58,7 @@ export function CurrentPlayerPanel({
             ↶ {t('cricket.game.undo')}
           </button>
           <button
+            data-testid="next-player-button"
             onClick={onNextPlayer}
             className="px-4 py-2 rounded-lg font-bold text-sm transition-all shadow-lg bg-red-600 text-white hover:bg-red-500 hover:scale-105"
             title={t('cricket.game.nextPlayerTooltip')}

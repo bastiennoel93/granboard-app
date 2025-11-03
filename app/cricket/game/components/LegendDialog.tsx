@@ -14,10 +14,11 @@ export function LegendDialog({ show, gameMode, onClose }: LegendDialogProps) {
 
   return (
     <div className="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-      <div className="bg-slate-900 rounded-2xl border-2 border-slate-700 max-w-2xl w-full max-h-[90vh] flex flex-col overflow-hidden">
+      <div data-testid="legend-dialog" className="bg-slate-900 rounded-2xl border-2 border-slate-700 max-w-2xl w-full max-h-[90vh] flex flex-col overflow-hidden">
         <div className="flex justify-between items-center p-4 md:p-6 pb-3 border-b border-slate-700">
           <h3 className="font-bold text-white text-xl md:text-2xl">{t('cricket.legend.title')}</h3>
           <button
+            data-testid="legend-close-button"
             onClick={onClose}
             className="text-slate-400 hover:text-white text-2xl font-bold px-3 py-1 hover:bg-slate-800 rounded-lg transition-colors"
           >

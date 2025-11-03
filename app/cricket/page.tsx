@@ -98,6 +98,7 @@ export default function CricketSetup() {
     <main className="relative min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 flex flex-col items-center px-8 py-10 gap-8">
       {/* Back button */}
       <button
+        data-testid="back-button"
         onClick={() => router.push("/")}
         className="absolute top-6 left-6 px-4 py-2 bg-slate-700 text-slate-300 hover:bg-slate-600 rounded-lg transition-all"
       >
@@ -107,6 +108,7 @@ export default function CricketSetup() {
       {/* Settings Button - Top Right */}
       <div className="absolute top-6 right-6">
         <button
+          data-testid="settings-button"
           onClick={() => openDialog()}
           className="px-4 py-2 bg-slate-700 text-slate-300 hover:bg-slate-600 rounded-lg transition-all flex items-center gap-2"
         >
@@ -130,6 +132,7 @@ export default function CricketSetup() {
 
         <div className="flex gap-4 mb-6">
           <input
+            data-testid="player-name-input"
             type="text"
             value={currentName}
             onChange={(e) => setCurrentName(e.target.value)}
@@ -139,6 +142,7 @@ export default function CricketSetup() {
             maxLength={20}
           />
           <button
+            data-testid="add-player-button"
             onClick={addPlayer}
             className="px-8 py-3 bg-gradient-to-r from-green-600 to-green-700 text-white rounded-lg hover:from-green-500 hover:to-green-600 transition-all font-medium shadow-lg"
           >
@@ -155,6 +159,7 @@ export default function CricketSetup() {
               {players.map((player, index) => (
                 <div
                   key={player.id}
+                  data-testid={`player-item-${player.name}`}
                   className="flex items-center justify-between p-4 bg-slate-700/50 rounded-xl border border-slate-600 hover:border-green-500 transition-all"
                 >
                   <div className="flex items-center gap-4">
@@ -166,6 +171,7 @@ export default function CricketSetup() {
                     </span>
                   </div>
                   <button
+                    data-testid={`remove-player-button-${player.name}`}
                     onClick={() => removePlayer(player.id)}
                     className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-500 transition-all text-sm font-medium"
                   >
@@ -189,6 +195,7 @@ export default function CricketSetup() {
           </h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <button
+              data-testid="game-mode-standard"
               onClick={() => setGameMode(CricketGameMode.Standard)}
               className={`group p-6 rounded-xl border-2 transition-all ${
                 gameMode === CricketGameMode.Standard
@@ -202,6 +209,7 @@ export default function CricketSetup() {
               </div>
             </button>
             <button
+              data-testid="game-mode-cutthroat"
               onClick={() => setGameMode(CricketGameMode.CutThroat)}
               className={`group p-6 rounded-xl border-2 transition-all ${
                 gameMode === CricketGameMode.CutThroat
@@ -223,6 +231,7 @@ export default function CricketSetup() {
           </h3>
           <div className="flex items-center gap-4 bg-slate-700/50 rounded-xl p-4">
             <input
+              data-testid="max-rounds-input"
               type="number"
               min="1"
               max="100"
@@ -238,6 +247,7 @@ export default function CricketSetup() {
 
         <div className="flex gap-4">
           <button
+            data-testid="start-game-button"
             onClick={startGame}
             disabled={players.length < 2}
             className={`flex-1 px-8 py-4 rounded-xl font-bold text-xl transition-all shadow-lg ${

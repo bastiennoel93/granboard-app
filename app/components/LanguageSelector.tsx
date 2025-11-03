@@ -25,6 +25,7 @@ export function LanguageSelector() {
   return (
     <div className="relative">
       <button
+        data-testid="language-selector-button"
         onClick={() => setIsOpen(!isOpen)}
         disabled={isPending}
         className="px-4 py-2 bg-slate-700 text-slate-300 hover:bg-slate-600 rounded-lg transition-all flex items-center gap-2"
@@ -56,10 +57,11 @@ export function LanguageSelector() {
           />
 
           {/* Dropdown */}
-          <div className="absolute right-0 top-full mt-2 z-50 bg-slate-700 rounded-lg shadow-xl border border-slate-600 overflow-hidden min-w-[150px]">
+          <div data-testid="language-dropdown" className="absolute right-0 top-full mt-2 z-50 bg-slate-700 rounded-lg shadow-xl border border-slate-600 overflow-hidden min-w-[150px]">
             {locales.map((loc) => (
               <button
                 key={loc}
+                data-testid={`language-option-${loc}`}
                 onClick={() => changeLanguage(loc)}
                 disabled={isPending}
                 className={`w-full px-4 py-3 text-left transition-all flex items-center gap-3 ${

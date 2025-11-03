@@ -39,6 +39,7 @@ export function GameHeader({
       <div className="flex gap-3">
         {onShowLegend && (
           <button
+            data-testid="legend-button"
             onClick={onShowLegend}
             className="px-4 py-2 bg-slate-700 text-white rounded-lg hover:bg-slate-600 text-sm font-medium transition-all shadow-lg"
             title={t('cricket.game.showLegend')}
@@ -48,6 +49,7 @@ export function GameHeader({
         )}
         {onShowSettings && (
           <button
+            data-testid="settings-button"
             onClick={onShowSettings}
             className="px-4 py-2 bg-slate-700 text-white rounded-lg hover:bg-slate-600 text-sm font-medium transition-all shadow-lg"
             title={t('cricket.game.settings')}
@@ -56,11 +58,12 @@ export function GameHeader({
           </button>
         )}
         {connectionState === "connecté" ? (
-          <div className="px-4 py-2 bg-green-600 text-white rounded-lg font-medium text-sm shadow-lg">
+          <div data-testid="connection-status" className="px-4 py-2 bg-green-600 text-white rounded-lg font-medium text-sm shadow-lg">
             ✓ {t('cricket.game.connected')}
           </div>
         ) : (
           <button
+            data-testid="connect-button"
             onClick={onConnect}
             disabled={connectionState === "connexion"}
             className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-500 text-sm font-medium disabled:bg-slate-700 transition-all shadow-lg"

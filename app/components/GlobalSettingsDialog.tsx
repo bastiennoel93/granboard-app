@@ -17,11 +17,12 @@ export function GlobalSettingsDialog() {
 
   return (
     <div className="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-      <div className="bg-slate-900 rounded-2xl border-2 border-slate-700 max-w-md w-full overflow-hidden">
+      <div data-testid="settings-dialog" className="bg-slate-900 rounded-2xl border-2 border-slate-700 max-w-md w-full overflow-hidden">
         {/* Header */}
         <div className="flex justify-between items-center p-6 pb-4 border-b border-slate-700">
           <h3 className="font-bold text-white text-2xl">{t('settings.title')}</h3>
           <button
+            data-testid="settings-close-button"
             onClick={closeDialog}
             className="text-slate-400 hover:text-white text-2xl font-bold px-3 py-1 hover:bg-slate-800 rounded-lg transition-colors"
           >
@@ -39,6 +40,7 @@ export function GlobalSettingsDialog() {
                 {soundEnabled ? "🔊" : "🔇"} {t('settings.sound.label')}
               </label>
               <button
+                data-testid="sound-toggle-button"
                 onClick={toggleSound}
                 className={`px-4 py-2 rounded-lg text-sm font-bold transition-all ${
                   soundEnabled
@@ -62,6 +64,7 @@ export function GlobalSettingsDialog() {
               </span>
             </div>
             <input
+              data-testid="volume-slider"
               type="range"
               min="0"
               max="1"

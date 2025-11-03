@@ -138,6 +138,7 @@ export function PlayerOrderDialog({
 
         <div className="space-y-4 mb-6">
           <button
+            data-testid="order-random-button"
             onClick={() => {
               const shuffled = [...players].sort(() => Math.random() - 0.5);
               onOrderSet(shuffled);
@@ -156,6 +157,7 @@ export function PlayerOrderDialog({
           </button>
 
           <button
+            data-testid="order-throw-button"
             onClick={() => {
               onThrowForOrder();
               onClose();
@@ -174,6 +176,7 @@ export function PlayerOrderDialog({
           </button>
 
           <button
+            data-testid="order-manual-button"
             onClick={() => setShowManualOrder(true)}
             className="w-full p-6 bg-gradient-to-r from-green-600 to-green-700 text-white rounded-xl hover:from-green-500 hover:to-green-600 transition-all shadow-lg text-left"
           >
@@ -189,6 +192,7 @@ export function PlayerOrderDialog({
           </button>
 
           <button
+            data-testid="order-current-button"
             onClick={() => {
               onOrderSet(players);
               onClose();
