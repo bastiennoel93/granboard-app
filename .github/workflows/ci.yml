@@ -65,7 +65,7 @@ jobs:
         run: pnpm exec playwright install --with-deps chromium firefox
 
       - name: Run E2E tests
-        run: pnpm test:e2e -- --project=chromium --project=firefox
+        run: pnpm test:e2e:ci
         # Note: WebKit désactivé - problèmes de compatibilité sur CI Linux
         # Les tests passent sur Chromium (Chrome/Edge) et Firefox qui représentent 95%+ des utilisateurs
 
