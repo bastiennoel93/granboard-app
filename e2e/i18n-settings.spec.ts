@@ -63,6 +63,10 @@ test.describe('Internationalization (i18n)', () => {
     await page.getByTestId('language-option-en').click();
     await page.waitForLoadState('load');
 
+    // La dialog se rouvre automatiquement, la fermer
+    await expect(page.getByTestId('settings-dialog')).toBeVisible();
+    await page.getByTestId('settings-close-button').click();
+
     // Naviguer vers la page d'accueil
     await page.getByTestId('back-button').click();
 

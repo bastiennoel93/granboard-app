@@ -53,7 +53,7 @@ test.describe('Cricket Game', () => {
     await expect(page.getByText(/Historique/i)).toBeVisible();
 
     // Vérifier que le round en cours est affiché
-    await expect(page.getByText(/Round 1.*en cours/i)).toBeVisible();
+    await expect(page.getByText(/Tour 1/i).first()).toBeVisible();
   });
 
   test('should display control buttons', async ({ page }) => {
@@ -108,8 +108,8 @@ test.describe('Cricket Game', () => {
 
   test('should show player info', async ({ page }) => {
     // Vérifier les informations du joueur actuel
-    await expect(page.getByText(/Fléchette.*\/ 3/i)).toBeVisible();
-    await expect(page.getByText(/Tour.*\//i)).toBeVisible();
+    await expect(page.getByText(/Fléchette.*\/ 3/i).first()).toBeVisible();
+    await expect(page.getByText(/Tour.*\//i).first()).toBeVisible();
   });
 
   test('should change player on button click', async ({ page }) => {

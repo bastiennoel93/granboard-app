@@ -67,6 +67,7 @@ export default function Home() {
       <div className="w-full max-w-2xl flex flex-col gap-8">
         <Link
           href="/01"
+          data-testid="game-card-01"
           className="group relative w-full h-32 text-white bg-gradient-to-r from-blue-600 via-blue-700 to-blue-800 hover:from-blue-500 hover:via-blue-600 hover:to-blue-700 rounded-2xl text-6xl font-bold flex items-center justify-center shadow-2xl transition-all duration-300 hover:scale-105 hover:shadow-blue-500/50"
         >
           <span className="relative z-10">{t('home.modes.01')}</span>
@@ -75,6 +76,7 @@ export default function Home() {
 
         <Link
           href="/cricket"
+          data-testid="game-card-cricket"
           className="group relative w-full h-32 text-white bg-gradient-to-r from-green-600 via-green-700 to-green-800 hover:from-green-500 hover:via-green-600 hover:to-green-700 rounded-2xl text-6xl font-bold flex items-center justify-center shadow-2xl transition-all duration-300 hover:scale-105 hover:shadow-green-500/50"
         >
           <span className="relative z-10">{t('home.modes.cricket')}</span>
