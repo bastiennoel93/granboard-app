@@ -81,7 +81,7 @@ export function PlayerOrderModal({
       <div className="bg-slate-800 rounded-2xl p-8 max-w-2xl w-full mx-4 border-2 border-green-500 shadow-2xl">
         <div className="flex justify-between items-center mb-6">
           <h2 className="text-3xl font-bold text-white">
-            Lancer pour l'ordre
+            Lancer pour l&apos;ordre
           </h2>
           <button
             onClick={onClose}
@@ -160,7 +160,7 @@ export function PlayerOrderModal({
               onClick={handleFinish}
               className="flex-1 px-8 py-4 bg-gradient-to-r from-green-600 to-green-700 text-white rounded-xl hover:from-green-500 hover:to-green-600 transition-all font-bold text-xl shadow-lg"
             >
-              ✓ Valider l'ordre
+              ✓ Valider l&apos;ordre
             </button>
           </div>
         )}

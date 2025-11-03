@@ -47,6 +47,7 @@ export function useGameHistory(
 
     // Update previous state reference (will be saved next time)
     previousGameStateRef.current = cloneGameState(gameState);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [gameState?.dartsThrown, gameState?.currentPlayerIndex]);
 
   const saveCurrentTurnHits = (hits: Segment[]) => {

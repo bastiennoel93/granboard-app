@@ -44,7 +44,7 @@ export function PlayerOrderDialog({
         <div className="bg-slate-800 rounded-2xl p-8 max-w-2xl w-full mx-4 border-2 border-green-500 shadow-2xl">
           <div className="flex justify-between items-center mb-6">
             <h2 className="text-3xl font-bold text-white">
-              Définir l'ordre manuellement
+              Définir l&apos;ordre manuellement
             </h2>
             <button
               onClick={() => setShowManualOrder(false)}
@@ -56,7 +56,7 @@ export function PlayerOrderDialog({
 
           <div className="mb-6 p-4 bg-blue-900/30 rounded-xl border border-blue-500/50">
             <p className="text-sm text-blue-300">
-              Utilisez les flèches pour organiser l'ordre des joueurs
+              Utilisez les flèches pour organiser l&apos;ordre des joueurs
             </p>
           </div>
 
@@ -106,7 +106,7 @@ export function PlayerOrderDialog({
             onClick={handleValidateManualOrder}
             className="w-full px-8 py-4 bg-gradient-to-r from-green-600 to-green-700 text-white rounded-xl hover:from-green-500 hover:to-green-600 transition-all font-bold text-xl shadow-lg"
           >
-            ✓ Valider l'ordre
+            ✓ Valider l&apos;ordre
           </button>
         </div>
       </div>
@@ -118,7 +118,7 @@ export function PlayerOrderDialog({
       <div className="bg-slate-800 rounded-2xl p-8 max-w-2xl w-full mx-4 border-2 border-green-500 shadow-2xl">
         <div className="flex justify-between items-center mb-6">
           <h2 className="text-3xl font-bold text-white">
-            Choisir l'ordre des joueurs
+            Choisir l&apos;ordre des joueurs
           </h2>
           <button
             onClick={onClose}
@@ -130,7 +130,7 @@ export function PlayerOrderDialog({
 
         <div className="mb-6 p-4 bg-blue-900/30 rounded-xl border border-blue-500/50">
           <p className="text-sm text-blue-300">
-            Comment souhaitez-vous déterminer l'ordre des joueurs ?
+            Comment souhaitez-vous déterminer l&apos;ordre des joueurs ?
           </p>
         </div>
 
@@ -163,7 +163,7 @@ export function PlayerOrderDialog({
             <div className="flex items-center gap-4">
               <span className="text-4xl">🎯</span>
               <div>
-                <div className="text-xl font-bold">Lancer pour l'ordre</div>
+                <div className="text-xl font-bold">Lancer pour l&apos;ordre</div>
                 <div className="text-sm text-blue-200">
                   Le score le plus élevé commence
                 </div>
@@ -180,7 +180,7 @@ export function PlayerOrderDialog({
               <div>
                 <div className="text-xl font-bold">Ordre manuel</div>
                 <div className="text-sm text-green-200">
-                  Définir l'ordre vous-même
+                  Définir l&apos;ordre vous-même
                 </div>
               </div>
             </div>
@@ -198,7 +198,7 @@ export function PlayerOrderDialog({
               <div>
                 <div className="text-xl font-bold">Ordre actuel</div>
                 <div className="text-sm text-slate-300">
-                  Conserver l'ordre d'ajout des joueurs
+                  Conserver l&apos;ordre d&apos;ajout des joueurs
                 </div>
               </div>
             </div>
