@@ -215,7 +215,7 @@ export function PlayerOrderDialog({
               <FontAwesomeIcon icon={faClipboardList} className="text-4xl w-12 h-12" />
               <div>
                 <div className="text-xl font-bold">{t('cricket.playerOrder.dialog.currentOrder')}</div>
-                <div className="text-sm text-theme-tertiary">
+                <div className="text-sm text-slate-200">
                   {t('cricket.playerOrder.dialog.currentOrderDesc')}
                 </div>
               </div>

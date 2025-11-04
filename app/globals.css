@@ -150,6 +150,12 @@ body {
   .border-game-cutthroat-light {
     border-color: rgb(252, 165, 165); /* red-300 */
   }
+  .bg-game-01-light {
+    background-color: rgba(29, 78, 216, 0.1); /* blue-700/10 */
+  }
+  .border-game-01-light {
+    border-color: rgba(29, 78, 216, 0.3); /* blue-700/30 */
+  }
 
   /* Dark mode game colors */
   .dark .bg-game-standard-light {
@@ -163,6 +169,12 @@ body {
   }
   .dark .border-game-cutthroat-light {
     border-color: rgba(185, 28, 28, 0.6); /* red-700/60 */
+  }
+  .dark .bg-game-01-light {
+    background-color: rgba(29, 78, 216, 0.2); /* blue-700/20 */
+  }
+  .dark .border-game-01-light {
+    border-color: rgba(29, 78, 216, 0.5); /* blue-700/50 */
   }
 }
 

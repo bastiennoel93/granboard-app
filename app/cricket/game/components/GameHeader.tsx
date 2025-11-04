@@ -1,12 +1,13 @@
 import { useTranslations } from "next-intl";
 import { CricketGameMode } from "@/services/cricket";
+import { ZeroOneMode } from "@/services/zeroone";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBook, faGear, faCheck } from "@fortawesome/free-solid-svg-icons";
 
 type ConnectionState = "déconnecté" | "connexion" | "connecté" | "erreur";
 
 interface GameHeaderProps {
-  gameMode: CricketGameMode;
+  gameMode: CricketGameMode | ZeroOneMode;
   connectionState: ConnectionState;
   onConnect: () => void;
   onShowLegend?: () => void;
@@ -22,19 +23,33 @@ export function GameHeader({
 }: GameHeaderProps) {
   const t = useTranslations();
 
+  // Determine if it's a ZeroOne mode
+  const isZeroOneMode = typeof gameMode === 'number' && (gameMode === 301 || gameMode === 501 || gameMode === 701);
+
   return (
     <div className="flex justify-between items-center">
       <div>
         <h1 className="text-3xl font-bold text-theme-primary tracking-wider">
-          CRICKET
-          {gameMode === CricketGameMode.CutThroat ? (
-            <span className="text-red-400 font-semibold text-base ml-3">
-              {t('cricket.gameMode.cutThroat.title')}
-            </span>
+          {isZeroOneMode ? (
+            <>
+              01
+              <span className="text-accent font-semibold text-base ml-3">
+                {gameMode}
+              </span>
+            </>
           ) : (
-            <span className="text-accent font-semibold text-base ml-3">
-              {t('cricket.gameMode.standard.title')}
-            </span>
+            <>
+              CRICKET
+              {gameMode === CricketGameMode.CutThroat ? (
+                <span className="text-red-400 font-semibold text-base ml-3">
+                  {t('cricket.gameMode.cutThroat.title')}
+                </span>
+              ) : (
+                <span className="text-accent font-semibold text-base ml-3">
+                  {t('cricket.gameMode.standard.title')}
+                </span>
+              )}
+            </>
           )}
         </h1>
       </div>

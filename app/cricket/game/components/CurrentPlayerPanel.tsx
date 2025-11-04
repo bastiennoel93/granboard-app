@@ -38,8 +38,8 @@ export function CurrentPlayerPanel({
             </p>
             <span>•</span>
             <p data-testid="round-counter">
-              {t('cricket.game.round')} <span className="font-bold text-theme-primary">{currentRound}</span> /{" "}
-              {maxRounds}
+              {t('cricket.game.round')} <span className="font-bold text-theme-primary">{currentRound}</span>
+              {maxRounds > 0 && <> / {maxRounds}</>}
             </p>
           </div>
         </div>
