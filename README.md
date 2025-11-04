@@ -181,7 +181,7 @@ pnpm test:e2e:debug    # Debug mode
 - [ ] Implement game replay functionality
 - [ ] Add sound effects and animations
 - [x] Support for multiple languages
-- [ ] Dark/light theme toggle
+- [x] Dark/light theme toggle
 
 ## Contributing
 

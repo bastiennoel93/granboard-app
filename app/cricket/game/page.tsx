@@ -222,7 +222,7 @@ export default function CricketGame() {
             closeDialog();
             handleNewGame();
           }}
-          className="w-full px-6 py-4 bg-slate-700 text-white rounded-xl hover:bg-slate-600 font-bold text-lg transition-all shadow-lg hover:scale-105"
+          className="w-full px-6 py-4 bg-green-600 text-white rounded-xl hover:bg-green-500 font-bold text-lg transition-all shadow-xl focus:outline-none"
         >
           {t('cricket.game.newGame')}
         </button>
@@ -232,7 +232,7 @@ export default function CricketGame() {
             closeDialog();
             handleQuit();
           }}
-          className="w-full px-6 py-4 bg-red-700 text-white rounded-xl hover:bg-red-600 font-bold text-lg transition-all shadow-lg hover:scale-105"
+          className="w-full px-6 py-4 bg-red-600 text-white rounded-xl hover:bg-red-500 font-bold text-lg transition-all shadow-lg hover:scale-105"
         >
           {t('cricket.game.quit')}
         </button>
@@ -245,8 +245,8 @@ export default function CricketGame() {
   // Loading state
   if (!gameState) {
     return (
-      <div className="flex min-h-screen items-center justify-center">
-        <div className="text-2xl text-white">Chargement...</div>
+      <div className="flex min-h-screen items-center justify-center bg-theme-primary">
+        <div className="text-2xl text-theme-primary">Chargement...</div>
       </div>
     );
   }
@@ -254,7 +254,7 @@ export default function CricketGame() {
   const currentPlayer = gameState.players[gameState.currentPlayerIndex];
 
   return (
-    <main className="h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 flex flex-col px-4 py-3 gap-3 overflow-hidden">
+    <main className="h-screen bg-theme-primary flex flex-col px-4 py-3 gap-3 overflow-hidden">
       <GameHeader
         gameMode={gameState.mode}
         connectionState={connectionState}

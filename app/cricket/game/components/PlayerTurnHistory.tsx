@@ -14,18 +14,18 @@ export function PlayerTurnHistory({ player, turns, currentTurnHits, currentRound
   const t = useTranslations();
 
   return (
-    <div className="bg-slate-900 rounded-xl shadow-2xl border-2 border-slate-700 h-full flex flex-col overflow-hidden">
-      <h3 className="text-lg font-bold text-white px-4 py-3 border-b-2 border-cyan-500 flex-shrink-0" data-testid="history-title">
+    <div className="bg-theme-card rounded-xl shadow-2xl border-2 border-theme-card h-full flex flex-col overflow-hidden">
+      <h3 className="text-lg font-bold text-theme-primary px-4 py-3 border-b-2 border-accent flex-shrink-0" data-testid="history-title">
         {t('cricket.game.history')} - {player.name}
       </h3>
       <div className="overflow-y-auto flex-1 p-4 space-y-2">
         {/* Current turn */}
-        <div className="bg-gradient-to-r from-cyan-900/50 to-slate-800/50 rounded-lg p-2 border-2 border-cyan-500">
+        <div className="bg-accent-bg rounded-lg p-2 border-2 border-accent">
           <div className="flex items-center justify-between mb-1.5">
-            <span className="text-xs font-bold text-cyan-400" data-testid={`current-round-${currentRound}`}>
+            <span className="text-xs font-bold text-accent" data-testid={`current-round-${currentRound}`}>
               {t('cricket.game.round')} {currentRound} ({t('cricket.game.inProgress')})
             </span>
-            <span className="text-xs text-cyan-400">
+            <span className="text-xs text-accent">
               {currentTurnHits.length} / 3 {t('cricket.game.darts')}
             </span>
           </div>
@@ -35,14 +35,14 @@ export function PlayerTurnHistory({ player, turns, currentTurnHits, currentRound
                 {currentTurnHits.map((hit, hitIdx) => (
                   <div
                     key={hitIdx}
-                    className={`flex-1 bg-slate-700/50 rounded px-2 py-1.5 text-center ${
+                    className={`flex-1 bg-theme-interactive rounded px-2 py-1.5 text-center ${
                       hitIdx === currentTurnHits.length - 1 ? "ring-2 ring-green-400" : ""
                     }`}
                   >
-                    <div className="text-sm font-bold text-white">
+                    <div className="text-sm font-bold text-theme-primary">
                       {hit.ShortName}
                     </div>
-                    <div className="text-xs text-slate-400">
+                    <div className="text-xs text-theme-muted">
                       {hit.Value}
                     </div>
                   </div>
@@ -52,10 +52,10 @@ export function PlayerTurnHistory({ player, turns, currentTurnHits, currentRound
                   Array.from({ length: 3 - currentTurnHits.length }).map((_, i) => (
                     <div
                       key={`empty-${i}`}
-                      className="flex-1 bg-slate-700/20 rounded px-2 py-1.5 text-center"
+                      className="flex-1 bg-theme-secondary rounded px-2 py-1.5 text-center"
                     >
-                      <div className="text-sm text-slate-600">-</div>
-                      <div className="text-xs text-slate-600">0</div>
+                      <div className="text-sm text-theme-tertiary">-</div>
+                      <div className="text-xs text-theme-tertiary">0</div>
                     </div>
                   ))}
               </>
@@ -64,10 +64,10 @@ export function PlayerTurnHistory({ player, turns, currentTurnHits, currentRound
               Array.from({ length: 3 }).map((_, i) => (
                 <div
                   key={`empty-${i}`}
-                  className="flex-1 bg-slate-700/20 rounded px-2 py-1.5 text-center"
+                  className="flex-1 bg-theme-secondary rounded px-2 py-1.5 text-center"
                 >
-                  <div className="text-sm text-slate-600">-</div>
-                  <div className="text-xs text-slate-600">0</div>
+                  <div className="text-sm text-theme-tertiary">-</div>
+                  <div className="text-xs text-theme-tertiary">0</div>
                 </div>
               ))
             )}
@@ -80,13 +80,13 @@ export function PlayerTurnHistory({ player, turns, currentTurnHits, currentRound
             return (
               <div
                 key={`${turn.round}-${idx}`}
-                className="bg-slate-800/50 rounded-lg p-2 border border-slate-700"
+                className="bg-theme-card rounded-lg p-2 border border-theme-card"
               >
                 <div className="flex items-center justify-between mb-1.5">
-                  <span className="text-xs font-bold text-cyan-400" data-testid={`completed-round-${turn.round}`}>
+                  <span className="text-xs font-bold text-accent" data-testid={`completed-round-${turn.round}`}>
                     {t('cricket.game.round')} {turn.round}
                   </span>
-                  <span className="text-xs text-slate-400">
+                  <span className="text-xs text-theme-muted">
                     {turn.hits.length} {t('cricket.game.darts')}
                   </span>
                 </div>
@@ -94,12 +94,12 @@ export function PlayerTurnHistory({ player, turns, currentTurnHits, currentRound
                   {turn.hits.map((hit, hitIdx) => (
                     <div
                       key={hitIdx}
-                      className="flex-1 bg-slate-700/50 rounded px-2 py-1.5 text-center"
+                      className="flex-1 bg-theme-interactive rounded px-2 py-1.5 text-center"
                     >
-                      <div className="text-sm font-bold text-white">
+                      <div className="text-sm font-bold text-theme-primary">
                         {hit.ShortName}
                       </div>
-                      <div className="text-xs text-slate-400">
+                      <div className="text-xs text-theme-muted">
                         {hit.Value}
                       </div>
                     </div>
@@ -109,10 +109,10 @@ export function PlayerTurnHistory({ player, turns, currentTurnHits, currentRound
                     Array.from({ length: 3 - turn.hits.length }).map((_, i) => (
                       <div
                         key={`empty-${i}`}
-                        className="flex-1 bg-slate-700/20 rounded px-2 py-1.5 text-center"
+                        className="flex-1 bg-theme-secondary rounded px-2 py-1.5 text-center"
                       >
-                        <div className="text-sm text-slate-600">-</div>
-                        <div className="text-xs text-slate-600">0</div>
+                        <div className="text-sm text-theme-tertiary">-</div>
+                        <div className="text-xs text-theme-tertiary">0</div>
                       </div>
                     ))}
                 </div>
@@ -120,7 +120,7 @@ export function PlayerTurnHistory({ player, turns, currentTurnHits, currentRound
             );
           })
         ) : (
-          <div className="text-slate-500 text-center py-4 text-sm">
+          <div className="text-theme-muted text-center py-4 text-sm">
             {t('cricket.game.noCompletedTurns')}
           </div>
         )}
