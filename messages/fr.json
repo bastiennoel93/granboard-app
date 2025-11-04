@@ -179,5 +179,78 @@
         "confirm": "Valider l'ordre"
       }
     }
+  },
+  "zeroOne": {
+    "title": "01",
+    "subtitle": "Configuration",
+    "players": {
+      "title": "Joueurs",
+      "placeholder": "Nom du joueur",
+      "count": "{count} joueur",
+      "count_plural": "{count} joueurs",
+      "minRequired": "Ajoutez au moins 2 joueurs pour commencer la partie"
+    },
+    "gameMode": {
+      "title": "Score de départ",
+      "short": "Partie courte",
+      "standard": "Partie standard",
+      "long": "Partie longue"
+    },
+    "options": {
+      "title": "Options",
+      "doubleOut": {
+        "title": "Double Out",
+        "description": "Il faut finir exactement sur 0 avec un double"
+      }
+    },
+    "rounds": {
+      "title": "Nombre de tours",
+      "description": "tours par partie (0 = illimité)"
+    },
+    "rules": {
+      "title": "Règles du 01",
+      "common": [
+        "Commencez avec un score de 301, 501 ou 701",
+        "Soustrayez vos points du score restant",
+        "Le premier à atteindre exactement 0 gagne",
+        "Si vous dépassez 0 ou arrivez à 1, c'est un 'bust' et votre tour est perdu"
+      ],
+      "doubleOut": {
+        "title": "Double Out:",
+        "rules": [
+          "Vous DEVEZ finir sur un double pour gagner",
+          "Finir sur autre chose qu'un double est un 'bust'"
+        ]
+      }
+    },
+    "errors": {
+      "minPlayers": "Il faut au moins 2 joueurs pour commencer!",
+      "connectionFailed": "Impossible de se connecter à la Granboard. Assurez-vous qu'elle est allumée et réessayez."
+    },
+    "game": {
+      "round": "Tour",
+      "rounds": "tours",
+      "remaining": "Restant",
+      "average": "Moyenne",
+      "darts": "Fléchettes",
+      "quit": "Quitter",
+      "settings": "Paramètres",
+      "newGame": "Nouvelle partie",
+      "gameStats": "Statistiques de la partie"
+    },
+    "legend": {
+      "title": "Légende et Règles",
+      "close": "Fermer",
+      "objectiveTitle": "Objectif",
+      "objectiveDesc": "Soustrayez vos points du score de départ pour atteindre exactement 0",
+      "ppdTitle": "PPD (Points Par Dart)",
+      "ppdDesc": "Moyenne de points marqués par fléchette (Total des points marqués ÷ Nombre de fléchettes lancées)",
+      "averageTitle": "Moyenne",
+      "averageDesc": "Moyenne de points marqués par tour de 3 fléchettes",
+      "bustTitle": "Bust",
+      "bustDesc": "Si vous dépassez 0 ou arrivez à 1, c'est un bust. Votre tour est perdu et votre score reste inchangé.",
+      "doubleOutTitle": "Double Out",
+      "doubleOutDesc": "Quand activé, vous DEVEZ finir sur un double pour gagner. Finir sur autre chose qu'un double est un bust."
+    }
   }
 }

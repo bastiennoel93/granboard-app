@@ -5,32 +5,33 @@ import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import {
   Player,
-  CricketGameMode,
-  CricketGameState,
+  ZeroOneMode,
+  ZeroOneGameState,
   createInitialGameState,
+  calculateDartValue,
   cloneGameState,
-} from "@/services/cricket";
+} from "@/services/zeroone";
 import { Segment } from "@/services/boardinfo";
 
 // Hooks
-import { useGameHistory } from "./hooks/useGameHistory";
-import { useGranboardConnection } from "./hooks/useGranboardConnection";
-import { useCricketGameState } from "./hooks/useCricketGameState";
-import { usePlayerTurnHistory } from "./hooks/usePlayerTurnHistory";
-import { useSounds } from "./hooks/useSounds";
+import { useGameHistory } from "../../cricket/game/hooks/useGameHistory";
+import { useGranboardConnection } from "../../cricket/game/hooks/useGranboardConnection";
+import { useZeroOneGameState } from "./hooks/useZeroOneGameState";
+import { usePlayerTurnHistory } from "../../cricket/game/hooks/usePlayerTurnHistory";
+import { useSounds } from "../../cricket/game/hooks/useSounds";
 import { useSettings } from "@/app/contexts/SettingsContext";
 
 // Components
-import { GameHeader } from "./components/GameHeader";
-import { GameOverBanner } from "./components/GameOverBanner";
-import { CurrentPlayerPanel } from "./components/CurrentPlayerPanel";
+import { GameHeader } from "../../cricket/game/components/GameHeader";
+import { GameOverBanner } from "../../cricket/game/components/GameOverBanner";
+import { CurrentPlayerPanel } from "../../cricket/game/components/CurrentPlayerPanel";
 import { ScoreBoard } from "./components/ScoreBoard";
-import { HitAnimation } from "./components/HitAnimation";
-import { TurnSummary } from "./components/TurnSummary";
-import { PlayerTurnHistory } from "./components/PlayerTurnHistory";
+import { HitAnimation } from "../../cricket/game/components/HitAnimation";
+import { TurnSummary } from "../../cricket/game/components/TurnSummary";
+import { PlayerTurnHistory } from "../../cricket/game/components/PlayerTurnHistory";
 import { LegendDialog } from "./components/LegendDialog";
 
-export default function CricketGame() {
+export default function ZeroOneGame() {
   const router = useRouter();
   const t = useTranslations();
   const { openDialog, closeDialog } = useSettings();
@@ -41,8 +42,6 @@ export default function CricketGame() {
     player: any;
     hits: any[];
   } | null>(null);
-
-  // Dialog states
   const [showLegend, setShowLegend] = useState(false);
 
   // Sound effects
@@ -53,7 +52,7 @@ export default function CricketGame() {
 
   // Use refs to access latest values in callbacks
   const addTurnRef = useRef(addTurn);
-  const gameStateRef = useRef<CricketGameState | null>(null);
+  const gameStateRef = useRef<ZeroOneGameState | null>(null);
   const saveCurrentTurnHitsRef = useRef<((hits: Segment[]) => void) | null>(null);
 
   useEffect(() => {
@@ -69,7 +68,7 @@ export default function CricketGame() {
     onSegmentHit,
     handleResetButton,
     restoreGameState,
-  } = useCricketGameState(
+  } = useZeroOneGameState(
     null,
     (hits) => {
       if (saveCurrentTurnHitsRef.current) {
@@ -104,20 +103,21 @@ export default function CricketGame() {
 
   // Initialize game state from session storage
   useEffect(() => {
-    const playersJson = sessionStorage.getItem("cricketPlayers");
-    const gameModeString = sessionStorage.getItem("cricketGameMode");
-    const maxRoundsString = sessionStorage.getItem("cricketMaxRounds");
+    const playersJson = sessionStorage.getItem("zeroOnePlayers");
+    const modeString = sessionStorage.getItem("zeroOneMode");
+    const doubleOutString = sessionStorage.getItem("zeroOneDoubleOut");
+    const maxRoundsString = sessionStorage.getItem("zeroOneMaxRounds");
 
     if (!playersJson) {
-      router.push("/cricket");
+      router.push("/01");
       return;
     }
 
     const players: Player[] = JSON.parse(playersJson);
-    const mode =
-      (gameModeString as CricketGameMode) || CricketGameMode.Standard;
-    const maxRounds = parseInt(maxRoundsString || "20");
-    setGameState(createInitialGameState(players, mode, maxRounds));
+    const mode = parseInt(modeString || "501") as ZeroOneMode;
+    const doubleOut = doubleOutString === "true";
+    const maxRounds = parseInt(maxRoundsString || "0");
+    setGameState(createInitialGameState(players, mode, doubleOut, maxRounds));
   }, [router, setGameState]);
 
   // Game history management
@@ -134,9 +134,10 @@ export default function CricketGame() {
 
   // Wrapper for segment hit with sound effects
   const handleSegmentHitWithSound = (segment: any) => {
-    // Store previous state to check for number closure
+    // Store previous state to check for bust
     const previousState = gameState ? { ...gameState } : null;
     const currentPlayerIndex = gameState?.currentPlayerIndex ?? 0;
+    const previousScore = previousState?.players[currentPlayerIndex].currentScore ?? 0;
 
     // Play sound based on segment type
     if (segment.Section === 0) {
@@ -156,28 +157,27 @@ export default function CricketGame() {
     // Process the hit
     onSegmentHit(segment);
 
-    // Check after state update if a number was closed
+    // Check after state update for special events (bust, checkout)
     setTimeout(() => {
       if (!previousState || !gameState) return;
 
-      const cricketNumbers = [15, 16, 17, 18, 19, 20, 25];
-      const hitNumber = segment.Section;
+      const currentPlayer = gameState.players[currentPlayerIndex];
+      const newScore = currentPlayer.currentScore;
 
-      if (cricketNumbers.includes(hitNumber)) {
-        const previousMarks = previousState.players[currentPlayerIndex].scores.get(hitNumber)?.marks ?? 0;
-        const newMarks = gameState.players[currentPlayerIndex].scores.get(hitNumber)?.marks ?? 0;
+      // Check for bust (score went back to previous)
+      if (newScore === previousScore && gameState.dartsThrown === 3) {
+        playSound("bust");
+      }
 
-        // Number just closed (went from < 3 to >= 3)
-        if (previousMarks < 3 && newMarks >= 3) {
-          // Check if all players have closed this number
-          const allClosed = gameState.players.every(p => (p.scores.get(hitNumber)?.marks ?? 0) >= 3);
+      // Check for checkout (score reached 0)
+      if (newScore === 0) {
+        playSound("checkout");
+      }
 
-          if (allClosed) {
-            playSound("all-closed");
-          } else {
-            playSound("number-closed");
-          }
-        }
+      // Check for high score (180)
+      const dartValue = calculateDartValue(segment);
+      if (dartValue >= 60) {
+        playSound("high-score");
       }
     }, 100);
   };
@@ -196,9 +196,6 @@ export default function CricketGame() {
     }
   }, [lastHit, showTurnSummary]);
 
-  // LED control disabled for Granboard 3s - protocol not yet implemented
-  // TODO: Implement correct LED protocol for Granboard 3s
-
   // Actions
   const handleUndo = () => {
     const previousEntry = undoLastAction();
@@ -208,7 +205,7 @@ export default function CricketGame() {
   };
 
   const handleNewGame = () => {
-    router.push("/cricket");
+    router.push("/01");
   };
 
   const handleQuit = () => {
@@ -226,7 +223,7 @@ export default function CricketGame() {
           }}
           className="w-full px-6 py-4 bg-green-600 text-white rounded-xl hover:bg-green-500 font-bold text-lg transition-all shadow-xl focus:outline-none"
         >
-          {t('cricket.game.newGame')}
+          {t('zeroOne.game.newGame')}
         </button>
         <button
           data-testid="quit-button"
@@ -236,7 +233,7 @@ export default function CricketGame() {
           }}
           className="w-full px-6 py-4 bg-red-600 text-white rounded-xl hover:bg-red-500 font-bold text-lg transition-all shadow-lg hover:scale-105"
         >
-          {t('cricket.game.quit')}
+          {t('zeroOne.game.quit')}
         </button>
       </div>
     );
@@ -302,7 +299,6 @@ export default function CricketGame() {
           <ScoreBoard
             players={gameState.players}
             currentPlayerIndex={gameState.currentPlayerIndex}
-            gameMode={gameState.mode}
             gameFinished={gameState.gameFinished}
           />
         </div>
@@ -323,10 +319,10 @@ export default function CricketGame() {
         />
       )}
 
-      {/* Dialogs */}
+      {/* Legend Dialog */}
       <LegendDialog
         show={showLegend}
-        gameMode={gameState.mode}
+        doubleOut={gameState.doubleOut}
         onClose={() => setShowLegend(false)}
       />
     </main>

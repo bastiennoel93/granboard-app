@@ -1,6 +1,9 @@
 import { useTranslations } from "next-intl";
 import { Segment } from "@/services/boardinfo";
-import { PlayerState } from "@/services/cricket";
+import { PlayerState as PlayerCricketState } from "@/services/cricket";
+import { PlayerState as PlayerZeroOneState } from "@/services/zeroone";
+
+type PlayerState = PlayerCricketState | PlayerZeroOneState;
 
 interface CurrentPlayerPanelProps {
   currentPlayer: PlayerState;
@@ -38,8 +41,8 @@ export function CurrentPlayerPanel({
             </p>
             <span>•</span>
             <p data-testid="round-counter">
-              {t('cricket.game.round')} <span className="font-bold text-theme-primary">{currentRound}</span> /{" "}
-              {maxRounds}
+              {t('cricket.game.round')} <span className="font-bold text-theme-primary">{currentRound}</span>
+              {maxRounds > 0 && <> / {maxRounds}</>}
             </p>
           </div>
         </div>

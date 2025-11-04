@@ -1,13 +1,26 @@
 import { useTranslations } from "next-intl";
-import { Player, PlayerState, calculateMPR, CricketGameMode } from "@/services/cricket";
+import { Player, PlayerState as PlayerCricketState, calculateMPR, CricketGameMode } from "@/services/cricket";
+import { PlayerState as PlayerZeroOneState, calculatePPD, calculateAverage, ZeroOneMode } from "@/services/zeroone";
+
+type GameMode = CricketGameMode | ZeroOneMode;
+type PlayerState = PlayerCricketState | PlayerZeroOneState;
 
 interface GameOverBannerProps {
   winner: Player;
   players: PlayerState[];
   totalRounds: number;
-  gameMode: CricketGameMode;
+  gameMode: GameMode;
   onNewGame: () => void;
   onQuit: () => void;
+}
+
+// Type guards
+function isCricketPlayer(player: PlayerState): player is PlayerCricketState {
+  return 'totalMarks' in player;
+}
+
+function isCricketMode(mode: GameMode): mode is CricketGameMode {
+  return typeof mode === 'string';
 }
 
 export function GameOverBanner({
@@ -19,17 +32,29 @@ export function GameOverBanner({
   onQuit,
 }: GameOverBannerProps) {
   const t = useTranslations();
+
+  const isCricket = isCricketMode(gameMode);
+
   // Sort players by ranking (winner first, then by score or MPR)
   const sortedPlayers = [...players].sort((a, b) => {
     if (a.player.id === winner.id) return -1;
     if (b.player.id === winner.id) return 1;
 
-    if (gameMode === CricketGameMode.CutThroat) {
-      // Cut Throat: Lower score is better
-      return a.totalPoints - b.totalPoints;
+    if (isCricket) {
+      const aCricket = a as PlayerCricketState;
+      const bCricket = b as PlayerCricketState;
+      if (gameMode === CricketGameMode.CutThroat) {
+        // Cut Throat: Lower score is better
+        return aCricket.totalPoints - bCricket.totalPoints;
+      } else {
+        // Standard: Higher score is better
+        return bCricket.totalPoints - aCricket.totalPoints;
+      }
     } else {
-      // Standard: Higher score is better
-      return b.totalPoints - a.totalPoints;
+      // 01 mode: Lower remaining score is better
+      const aZeroOne = a as PlayerZeroOneState;
+      const bZeroOne = b as PlayerZeroOneState;
+      return aZeroOne.currentScore - bZeroOne.currentScore;
     }
   });
 
@@ -48,7 +73,7 @@ export function GameOverBanner({
       {/* Statistics Table */}
       <div className="bg-white/90 backdrop-blur-sm rounded-xl p-6 mb-6">
         <h3 className="text-2xl font-bold text-theme-primary mb-4 text-center">
-          {t('cricket.game.gameStats')}
+          {isCricket ? t('cricket.game.gameStats') : t('zeroOne.game.gameStats')}
         </h3>
         <div className="overflow-x-auto">
           <table className="w-full">
@@ -56,9 +81,19 @@ export function GameOverBanner({
               <tr className="border-b-2 border-theme-secondary">
                 <th className="p-3 text-left font-bold text-theme-secondary">{t('cricket.game.rank')}</th>
                 <th className="p-3 text-left font-bold text-theme-secondary">{t('cricket.game.player')}</th>
-                <th className="p-3 text-center font-bold text-theme-secondary">{t('cricket.game.points')}</th>
-                <th className="p-3 text-center font-bold text-theme-secondary">{t('cricket.game.marks')}</th>
-                <th className="p-3 text-center font-bold text-theme-secondary">{t('cricket.game.mpr')}</th>
+                {isCricket ? (
+                  <>
+                    <th className="p-3 text-center font-bold text-theme-secondary">{t('cricket.game.points')}</th>
+                    <th className="p-3 text-center font-bold text-theme-secondary">{t('cricket.game.marks')}</th>
+                    <th className="p-3 text-center font-bold text-theme-secondary">{t('cricket.game.mpr')}</th>
+                  </>
+                ) : (
+                  <>
+                    <th className="p-3 text-center font-bold text-theme-secondary">{t('zeroOne.game.remaining')}</th>
+                    <th className="p-3 text-center font-bold text-theme-secondary">{t('zeroOne.game.average')}</th>
+                    <th className="p-3 text-center font-bold text-theme-secondary">PPD</th>
+                  </>
+                )}
               </tr>
             </thead>
             <tbody>
@@ -90,21 +125,37 @@ export function GameOverBanner({
                         <span className="ml-2 text-yellow-600">👑</span>
                       )}
                     </td>
-                    <td
-                      className={`p-3 text-center font-bold ${
-                        gameMode === CricketGameMode.CutThroat
-                          ? "text-red-600"
-                          : "text-accent"
-                      }`}
-                    >
-                      {playerState.totalPoints}
-                    </td>
-                    <td className="p-3 text-center font-semibold text-theme-secondary">
-                      {playerState.totalMarks}
-                    </td>
-                    <td className="p-3 text-center font-bold text-accent text-lg">
-                      {calculateMPR(playerState).toFixed(2)}
-                    </td>
+                    {isCricket && isCricketPlayer(playerState) ? (
+                      <>
+                        <td
+                          className={`p-3 text-center font-bold ${
+                            gameMode === CricketGameMode.CutThroat
+                              ? "text-red-600"
+                              : "text-accent"
+                          }`}
+                        >
+                          {playerState.totalPoints}
+                        </td>
+                        <td className="p-3 text-center font-semibold text-theme-secondary">
+                          {playerState.totalMarks}
+                        </td>
+                        <td className="p-3 text-center font-bold text-accent text-lg">
+                          {calculateMPR(playerState).toFixed(2)}
+                        </td>
+                      </>
+                    ) : !isCricket && !isCricketPlayer(playerState) ? (
+                      <>
+                        <td className="p-3 text-center font-bold text-accent">
+                          {playerState.currentScore}
+                        </td>
+                        <td className="p-3 text-center font-semibold text-theme-secondary">
+                          {calculateAverage(playerState).toFixed(2)}
+                        </td>
+                        <td className="p-3 text-center font-bold text-accent text-lg">
+                          {calculatePPD(playerState).toFixed(2)}
+                        </td>
+                      </>
+                    ) : null}
                   </tr>
                 );
               })}
