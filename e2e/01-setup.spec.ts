@@ -7,7 +7,7 @@ test.describe('01 Setup', () => {
 
   test('should display 01 setup page with default values', async ({ page }) => {
     // Vérifier le titre
-    await expect(page.getByRole('heading', { name: /01/i })).toBeVisible();
+    await expect(page.getByRole('heading', { name: /01/i }).first()).toBeVisible();
 
     // Vérifier les modes de jeu
     await expect(page.getByTestId('game-mode-301')).toBeVisible();
@@ -270,15 +270,18 @@ test.describe('01 Setup', () => {
 
   test('should display rules section', async ({ page }) => {
     // Vérifier que la section des règles est visible
-    await expect(page.getByText(/Objectif/i)).toBeVisible();
+    await expect(page.getByText(/Règles du 01/i)).toBeVisible();
   });
 
   test('should show double out rules when enabled', async ({ page }) => {
+    // Les règles du double out ne devraient pas être visibles initialement
+    await expect(page.getByText(/Double Out:/i)).not.toBeVisible();
+
     // Activer le double out
     await page.getByTestId('double-out-checkbox').click();
 
     // Vérifier que les règles du double out sont affichées
-    await expect(page.getByText(/Double Out/i)).toBeVisible();
+    await expect(page.getByText(/Double Out:/i)).toBeVisible();
   });
 
   test('should support multiple players', async ({ page }) => {

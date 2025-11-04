@@ -35,7 +35,7 @@ test.describe('01 Full Game Flow', () => {
 
     // 5. Vérifier l'interface de jeu
     await expect(page.getByRole('heading').filter({ hasText: /01/i }).first()).toBeVisible();
-    await expect(page.getByText('501')).toBeVisible();
+    await expect(page.getByRole('heading').filter({ hasText: '501' })).toBeVisible();
     await expect(page.getByRole('heading').filter({ hasText: /Alice|Bob/ }).first()).toBeVisible();
 
     // 6. Vérifier le scoreboard
@@ -105,7 +105,7 @@ test.describe('01 Full Game Flow', () => {
     await page.waitForURL(/\/01\/game/);
 
     // 5. Vérifier que le mode 301 est affiché
-    await expect(page.getByText('301')).toBeVisible();
+    await expect(page.getByRole('heading').filter({ hasText: '301' })).toBeVisible();
 
     // 6. Vérifier les scores initiaux
     const aliceCard = page.getByTestId('scoreboard-player-Alice');
@@ -142,7 +142,7 @@ test.describe('01 Full Game Flow', () => {
     await page.waitForURL(/\/01\/game/);
 
     // 5. Vérifier que le mode 701 est affiché
-    await expect(page.getByText('701')).toBeVisible();
+    await expect(page.getByRole('heading').filter({ hasText: '701' })).toBeVisible();
 
     // 6. Vérifier les scores initiaux
     const aliceCard = page.getByTestId('scoreboard-player-Alice');
@@ -180,7 +180,7 @@ test.describe('01 Full Game Flow', () => {
 
     // 5. Vérifier que les règles du double out sont dans la légende
     await page.getByTestId('legend-button').click();
-    await expect(page.getByText(/Double Out/i)).toBeVisible();
+    await expect(page.getByText(/DEVEZ finir sur un double/i)).toBeVisible();
     await page.getByTestId('legend-close-button').click();
   });
 
@@ -291,7 +291,7 @@ test.describe('01 Full Game Flow', () => {
     await page.goto('/01');
 
     // Vérifier que les règles sont affichées
-    await expect(page.getByText(/Objectif/i)).toBeVisible();
+    await expect(page.getByText(/Règles du 01/i)).toBeVisible();
   });
 
   test('should update rules when double out is enabled', async ({ page }) => {
@@ -299,13 +299,13 @@ test.describe('01 Full Game Flow', () => {
     await page.goto('/01');
 
     // Les règles du double out ne devraient pas être visibles initialement
-    await expect(page.getByText(/Double Out/i)).not.toBeVisible();
+    await expect(page.getByText(/Double Out:/i)).not.toBeVisible();
 
     // Activer le double out
     await page.getByTestId('double-out-checkbox').click();
 
     // Les règles du double out devraient maintenant être visibles
-    await expect(page.getByText(/Double Out/i)).toBeVisible();
+    await expect(page.getByText(/Double Out:/i)).toBeVisible();
   });
 
   test('should allow starting new game from within a game', async ({ page }) => {

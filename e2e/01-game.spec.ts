@@ -35,7 +35,7 @@ test.describe('01 Game', () => {
     await expect(page.getByRole('heading').filter({ hasText: /01/i }).first()).toBeVisible();
 
     // Vérifier que le mode 501 est affiché
-    await expect(page.getByText('501')).toBeVisible();
+    await expect(page.getByRole('heading').filter({ hasText: '501' })).toBeVisible();
 
     // Vérifier que le joueur actuel est affiché
     await expect(page.getByRole('heading').filter({ hasText: /Alice|Bob/ }).first()).toBeVisible();
@@ -256,7 +256,7 @@ test.describe('01 Game - 301 Mode', () => {
 
   test('should display 301 mode in header', async ({ page }) => {
     // Vérifier que le mode 301 est affiché
-    await expect(page.getByText('301')).toBeVisible();
+    await expect(page.getByRole('heading').filter({ hasText: '301' })).toBeVisible();
   });
 
   test('should display initial scores correctly for 301 mode', async ({ page }) => {
@@ -300,7 +300,7 @@ test.describe('01 Game - 701 Mode', () => {
 
   test('should display 701 mode in header', async ({ page }) => {
     // Vérifier que le mode 701 est affiché
-    await expect(page.getByText('701')).toBeVisible();
+    await expect(page.getByRole('heading').filter({ hasText: '701' })).toBeVisible();
   });
 
   test('should display initial scores correctly for 701 mode', async ({ page }) => {
@@ -347,7 +347,7 @@ test.describe('01 Game - Double Out Mode', () => {
     await page.getByTestId('legend-button').click();
 
     // Vérifier que les règles du double out sont affichées
-    await expect(page.getByText(/Double Out/i)).toBeVisible();
+    await expect(page.getByText(/DEVEZ finir sur un double/i)).toBeVisible();
 
     // Fermer la légende
     await page.getByTestId('legend-close-button').click();
