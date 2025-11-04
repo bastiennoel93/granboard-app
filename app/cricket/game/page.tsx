@@ -1,13 +1,15 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import {
   Player,
   CricketGameMode,
+  CricketGameState,
   createInitialGameState,
 } from "@/services/cricket";
+import { Segment } from "@/services/boardinfo";
 
 // Hooks
 import { useGameHistory } from "./hooks/useGameHistory";
@@ -49,11 +51,11 @@ export default function CricketGame() {
   const { addTurn, getPlayerHistory } = usePlayerTurnHistory();
 
   // Use refs to access latest values in callbacks
-  const addTurnRef = React.useRef(addTurn);
-  const gameStateRef = React.useRef<CricketGameState | null>(null);
-  const saveCurrentTurnHitsRef = React.useRef<((hits: Segment[]) => void) | null>(null);
+  const addTurnRef = useRef(addTurn);
+  const gameStateRef = useRef<CricketGameState | null>(null);
+  const saveCurrentTurnHitsRef = useRef<((hits: Segment[]) => void) | null>(null);
 
-  React.useEffect(() => {
+  useEffect(() => {
     addTurnRef.current = addTurn;
   }, [addTurn]);
 
@@ -95,7 +97,7 @@ export default function CricketGame() {
   );
 
   // Update refs when gameState changes
-  React.useEffect(() => {
+  useEffect(() => {
     gameStateRef.current = gameState;
   }, [gameState]);
 
@@ -124,7 +126,7 @@ export default function CricketGame() {
   );
 
   // Update saveCurrentTurnHits ref
-  React.useEffect(() => {
+  useEffect(() => {
     saveCurrentTurnHitsRef.current = saveCurrentTurnHits;
   }, [saveCurrentTurnHits]);
 
