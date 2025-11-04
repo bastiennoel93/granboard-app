@@ -97,8 +97,8 @@ export function PlayerOrderModal({
           </button>
         </div>
 
-        <div className="mb-6 p-4 bg-blue-900/30 rounded-xl border border-blue-500/50">
-          <p className="text-sm text-blue-300">
+        <div className="mb-6 p-4 bg-accent-bg rounded-xl border border-accent/50">
+          <p className="text-sm text-accent">
             {t('cricket.playerOrder.modal.subtitle')}
           </p>
         </div>
@@ -158,13 +158,13 @@ export function PlayerOrderModal({
           <div className="flex gap-3">
             <button
               onClick={handleReset}
-              className="flex-1 px-8 py-4 bg-gradient-to-r from-orange-600 to-orange-700 text-white rounded-xl hover:from-orange-500 hover:to-orange-600 transition-all font-bold text-xl shadow-lg flex items-center justify-center gap-2"
+              className="flex-1 px-8 py-4 bg-orange-700 text-white rounded-xl hover:bg-orange-600 transition-all font-bold text-xl shadow-lg flex items-center justify-center gap-2"
             >
               <FontAwesomeIcon icon={faRotateRight} /> {t('cricket.playerOrder.modal.retry')}
             </button>
             <button
               onClick={handleFinish}
-              className="flex-1 px-8 py-4 bg-gradient-to-r from-green-600 to-green-700 text-white rounded-xl hover:from-green-500 hover:to-green-600 transition-all font-bold text-xl shadow-lg flex items-center justify-center gap-2"
+              className="flex-1 px-8 py-4 bg-green-700 text-white rounded-xl hover:bg-green-600 transition-all font-bold text-xl shadow-lg flex items-center justify-center gap-2"
             >
               <FontAwesomeIcon icon={faCheck} /> {t('cricket.playerOrder.modal.confirm')}
             </button>

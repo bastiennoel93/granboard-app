@@ -24,6 +24,12 @@
       "label": "Volume",
       "enableSoundFirst": "Enable sound to adjust volume"
     },
+    "theme": {
+      "label": "Theme",
+      "light": "Light",
+      "dark": "Dark",
+      "system": "System"
+    },
     "language": {
       "label": "Language"
     }

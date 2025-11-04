@@ -34,7 +34,7 @@ export function GameOverBanner({
   });
 
   return (
-    <div className="bg-gradient-to-r from-yellow-500 via-yellow-600 to-yellow-700 text-white p-8 rounded-2xl shadow-2xl border-2 border-yellow-400">
+    <div className="bg-yellow-600 text-white p-8 rounded-2xl shadow-2xl border-2 border-yellow-400">
       <h2 className="text-5xl font-bold mb-2 text-center">
         🎉 {t('cricket.game.wonGame', { name: winner.name })} 🎉
       </h2>
@@ -47,18 +47,18 @@ export function GameOverBanner({
 
       {/* Statistics Table */}
       <div className="bg-white/90 backdrop-blur-sm rounded-xl p-6 mb-6">
-        <h3 className="text-2xl font-bold text-slate-800 mb-4 text-center">
+        <h3 className="text-2xl font-bold text-theme-primary mb-4 text-center">
           {t('cricket.game.gameStats')}
         </h3>
         <div className="overflow-x-auto">
           <table className="w-full">
             <thead>
-              <tr className="border-b-2 border-slate-300">
-                <th className="p-3 text-left font-bold text-slate-700">{t('cricket.game.rank')}</th>
-                <th className="p-3 text-left font-bold text-slate-700">{t('cricket.game.player')}</th>
-                <th className="p-3 text-center font-bold text-slate-700">{t('cricket.game.points')}</th>
-                <th className="p-3 text-center font-bold text-slate-700">{t('cricket.game.marks')}</th>
-                <th className="p-3 text-center font-bold text-slate-700">{t('cricket.game.mpr')}</th>
+              <tr className="border-b-2 border-theme-secondary">
+                <th className="p-3 text-left font-bold text-theme-secondary">{t('cricket.game.rank')}</th>
+                <th className="p-3 text-left font-bold text-theme-secondary">{t('cricket.game.player')}</th>
+                <th className="p-3 text-center font-bold text-theme-secondary">{t('cricket.game.points')}</th>
+                <th className="p-3 text-center font-bold text-theme-secondary">{t('cricket.game.marks')}</th>
+                <th className="p-3 text-center font-bold text-theme-secondary">{t('cricket.game.mpr')}</th>
               </tr>
             </thead>
             <tbody>
@@ -67,7 +67,7 @@ export function GameOverBanner({
                 return (
                   <tr
                     key={playerState.player.id}
-                    className={`border-b border-slate-200 ${
+                    className={`border-b border-theme-primary ${
                       isWinner ? "bg-yellow-100" : ""
                     }`}
                   >
@@ -79,12 +79,12 @@ export function GameOverBanner({
                       ) : index === 2 ? (
                         <span className="text-2xl">🥉</span>
                       ) : (
-                        <span className="text-slate-600 font-semibold">
+                        <span className="text-theme-tertiary font-semibold">
                           {index + 1}
                         </span>
                       )}
                     </td>
-                    <td className="p-3 font-bold text-slate-800">
+                    <td className="p-3 font-bold text-theme-primary">
                       {playerState.player.name}
                       {isWinner && (
                         <span className="ml-2 text-yellow-600">👑</span>
@@ -94,15 +94,15 @@ export function GameOverBanner({
                       className={`p-3 text-center font-bold ${
                         gameMode === CricketGameMode.CutThroat
                           ? "text-red-600"
-                          : "text-blue-600"
+                          : "text-accent"
                       }`}
                     >
                       {playerState.totalPoints}
                     </td>
-                    <td className="p-3 text-center font-semibold text-slate-700">
+                    <td className="p-3 text-center font-semibold text-theme-secondary">
                       {playerState.totalMarks}
                     </td>
-                    <td className="p-3 text-center font-bold text-cyan-600 text-lg">
+                    <td className="p-3 text-center font-bold text-accent text-lg">
                       {calculateMPR(playerState).toFixed(2)}
                     </td>
                   </tr>
@@ -117,13 +117,13 @@ export function GameOverBanner({
       <div className="flex gap-4 justify-center">
         <button
           onClick={onNewGame}
-          className="px-8 py-3 bg-white text-yellow-700 rounded-xl hover:bg-slate-100 font-bold text-lg transition-all shadow-lg hover:scale-105"
+          className="px-8 py-3 bg-white text-yellow-700 rounded-xl hover:bg-theme-secondary font-bold text-lg transition-all shadow-lg hover:scale-105"
         >
           {t('cricket.game.newGame')}
         </button>
         <button
           onClick={onQuit}
-          className="px-8 py-3 bg-slate-800 text-white rounded-xl hover:bg-slate-700 font-bold text-lg transition-all shadow-lg hover:scale-105"
+          className="px-8 py-3 bg-theme-secondary text-theme-primary rounded-xl hover:bg-theme-tertiary font-bold text-lg transition-all shadow-lg hover:scale-105"
         >
           {t('cricket.game.quit')}
         </button>

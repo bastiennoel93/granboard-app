@@ -52,17 +52,17 @@ export function ScoreBoard({
     return (
       <td
         key={playerState.player.id}
-        className={`p-2 text-center ${allClosed ? "bg-slate-800/30" : ""}`}
+        className={`p-2 text-center ${allClosed ? "bg-theme-secondary" : ""}`}
       >
         <div
           className={`text-2xl font-bold ${
             isClosed
               ? allClosed
-                ? "text-slate-500"
+                ? "text-theme-muted"
                 : "text-green-400"
               : score.marks > 0
-              ? "text-cyan-400"
-              : "text-slate-700"
+              ? "text-accent"
+              : "text-theme-interactive"
           }`}
         >
           {symbol || "-"}
@@ -72,11 +72,11 @@ export function ScoreBoard({
   };
 
   return (
-    <div className="bg-slate-900 rounded-xl shadow-2xl border-2 border-slate-700 h-full flex flex-col overflow-hidden">
+    <div className="bg-theme-card rounded-xl shadow-2xl border-2 border-theme-card h-full flex flex-col overflow-hidden">
       <div className="overflow-auto flex-1 relative">
         <table className="w-full border-collapse h-full">
-          <thead className="sticky top-0 bg-slate-900 z-10">
-            <tr className="border-b-2 border-cyan-500">
+          <thead className="sticky top-0 bg-theme-card z-10">
+            <tr className="border-b-2 border-accent">
               {/* Left players headers */}
               {leftPlayers.map((playerState, idx) => {
                 const isCurrentPlayer = players.indexOf(playerState) === currentPlayerIndex;
@@ -86,21 +86,21 @@ export function ScoreBoard({
                     data-testid={`scoreboard-player-${playerState.player.name}`}
                     className={`p-2 text-center font-bold text-base min-w-[70px] ${
                       isCurrentPlayer && !gameFinished
-                        ? "text-cyan-400 border-b-4 border-cyan-400"
-                        : "text-white"
+                        ? "text-accent border-b-4 border-accent"
+                        : "text-theme-primary"
                     }`}
                   >
                     <div className="flex flex-col items-center gap-0.5">
                       <span className="text-sm">{playerState.player.name}</span>
                       {isCurrentPlayer && !gameFinished && (
-                        <span className="text-cyan-400 text-xs">▼</span>
+                        <span className="text-accent text-xs">▼</span>
                       )}
                     </div>
                   </th>
                 );
               })}
               {/* Number column header */}
-              <th className="p-2 text-center font-bold text-white text-base min-w-[60px] border-x-2 border-slate-700">
+              <th className="p-2 text-center font-bold text-theme-primary text-base min-w-[60px] border-x-2 border-theme-card">
 
               </th>
               {/* Right players headers */}
@@ -112,14 +112,14 @@ export function ScoreBoard({
                     data-testid={`scoreboard-player-${playerState.player.name}`}
                     className={`p-2 text-center font-bold text-base min-w-[70px] ${
                       isCurrentPlayer && !gameFinished
-                        ? "text-cyan-400 border-b-4 border-cyan-400"
-                        : "text-white"
+                        ? "text-accent border-b-4 border-accent"
+                        : "text-theme-primary"
                     }`}
                   >
                     <div className="flex flex-col items-center gap-0.5">
                       <span className="text-sm">{playerState.player.name}</span>
                       {isCurrentPlayer && !gameFinished && (
-                        <span className="text-cyan-400 text-xs">▼</span>
+                        <span className="text-accent text-xs">▼</span>
                       )}
                     </div>
                   </th>
@@ -133,8 +133,8 @@ export function ScoreBoard({
               return (
                 <tr
                   key={num}
-                  className={`border-b border-slate-700 ${
-                    allClosed ? "bg-slate-800/50" : ""
+                  className={`border-b border-theme-card ${
+                    allClosed ? "bg-theme-elevated-alpha" : ""
                   }`}
                 >
                   {/* Left players */}
@@ -142,8 +142,8 @@ export function ScoreBoard({
                   {/* Number column */}
                   <td
                     data-testid={`cricket-number-${num === 25 ? 'Bull' : num}`}
-                    className={`p-2 text-center font-bold text-xl border-x-2 border-slate-700 ${
-                      allClosed ? "text-slate-500" : "text-white"
+                    className={`p-2 text-center font-bold text-xl border-x-2 border-theme-card ${
+                      allClosed ? "text-theme-muted" : "text-theme-primary"
                     }`}
                   >
                     {num === 25 ? "Bull" : num}
@@ -154,22 +154,22 @@ export function ScoreBoard({
               );
             })}
           </tbody>
-          <tfoot className="sticky bottom-0 bg-slate-900 z-10">
+          <tfoot className="sticky bottom-0 bg-theme-card z-10">
             {/* Total Points Row */}
-            <tr className="border-t-2 border-cyan-500 bg-slate-800">
+            <tr className="border-t-2 border-accent bg-theme-secondary">
               {leftPlayers.map((playerState) => (
                 <td
                   key={playerState.player.id}
                   className={`p-2 text-center font-bold text-lg ${
                     gameMode === CricketGameMode.CutThroat
                       ? "text-red-400"
-                      : "text-white"
+                      : "text-theme-primary"
                   }`}
                 >
                   {playerState.totalPoints}
                 </td>
               ))}
-              <td className="p-2 text-center font-bold text-white text-sm border-x-2 border-slate-700" data-testid="points-label">
+              <td className="p-2 text-center font-bold text-theme-primary text-sm border-x-2 border-theme-card" data-testid="points-label">
                 Points
               </td>
               {rightPlayers.map((playerState) => (
@@ -178,7 +178,7 @@ export function ScoreBoard({
                   className={`p-2 text-center font-bold text-lg ${
                     gameMode === CricketGameMode.CutThroat
                       ? "text-red-400"
-                      : "text-white"
+                      : "text-theme-primary"
                   }`}
                 >
                   {playerState.totalPoints}
@@ -186,22 +186,22 @@ export function ScoreBoard({
               ))}
             </tr>
             {/* MPR Row */}
-            <tr className="bg-slate-800">
+            <tr className="bg-theme-secondary">
               {leftPlayers.map((playerState) => (
                 <td
                   key={playerState.player.id}
-                  className="p-2 text-center font-bold text-base text-cyan-400"
+                  className="p-2 text-center font-bold text-base text-accent"
                 >
                   {calculateMPR(playerState).toFixed(2)}
                 </td>
               ))}
-              <td className="p-2 text-center font-bold text-white text-sm border-x-2 border-slate-700" data-testid="mpr-label">
+              <td className="p-2 text-center font-bold text-theme-primary text-sm border-x-2 border-theme-card" data-testid="mpr-label">
                 MPR
               </td>
               {rightPlayers.map((playerState) => (
                 <td
                   key={playerState.player.id}
-                  className="p-2 text-center font-bold text-base text-cyan-400"
+                  className="p-2 text-center font-bold text-base text-accent"
                 >
                   {calculateMPR(playerState).toFixed(2)}
                 </td>

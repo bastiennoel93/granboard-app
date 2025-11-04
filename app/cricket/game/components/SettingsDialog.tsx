@@ -71,7 +71,7 @@ export function SettingsDialog({
                 <label className="text-white font-bold text-base flex items-center gap-2">
                   <FontAwesomeIcon icon={faVolumeHigh} /> Volume
                 </label>
-                <span className="text-cyan-400 font-bold text-sm">
+                <span className="text-accent font-bold text-sm">
                   {Math.round(volume * 100)}%
                 </span>
               </div>
@@ -88,16 +88,16 @@ export function SettingsDialog({
                   [&::-webkit-slider-thumb]:appearance-none
                   [&::-webkit-slider-thumb]:w-4
                   [&::-webkit-slider-thumb]:h-4
-                  [&::-webkit-slider-thumb]:bg-cyan-500
+                  [&::-webkit-slider-thumb]:bg-accent
                   [&::-webkit-slider-thumb]:rounded-full
                   [&::-webkit-slider-thumb]:cursor-pointer
-                  [&::-webkit-slider-thumb]:hover:bg-cyan-400
+                  [&::-webkit-slider-thumb]:hover:opacity-90
                   [&::-moz-range-thumb]:w-4
                   [&::-moz-range-thumb]:h-4
-                  [&::-moz-range-thumb]:bg-cyan-500
+                  [&::-moz-range-thumb]:bg-accent
                   [&::-moz-range-thumb]:rounded-full
                   [&::-moz-range-thumb]:cursor-pointer
-                  [&::-moz-range-thumb]:hover:bg-cyan-400
+                  [&::-moz-range-thumb]:hover:opacity-90
                   [&::-moz-range-thumb]:border-0"
               />
               {!soundEnabled && (
@@ -132,7 +132,7 @@ export function SettingsDialog({
         <div className="p-6 pt-4 border-t border-slate-700">
           <button
             onClick={onClose}
-            className="w-full px-6 py-3 bg-cyan-600 text-white rounded-xl hover:bg-cyan-500 font-bold transition-all shadow-lg"
+            className="w-full px-6 py-3 bg-accent text-white rounded-xl hover:opacity-90 font-bold transition-all shadow-lg"
           >
             Annuler
           </button>
