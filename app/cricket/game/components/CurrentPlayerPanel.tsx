@@ -1,6 +1,9 @@
 import { useTranslations } from "next-intl";
 import { Segment } from "@/services/boardinfo";
-import { PlayerState } from "@/services/cricket";
+import { PlayerState as PlayerCricketState } from "@/services/cricket";
+import { PlayerState as PlayerZeroOneState } from "@/services/zeroone";
+
+type PlayerState = PlayerCricketState | PlayerZeroOneState;
 
 interface CurrentPlayerPanelProps {
   currentPlayer: PlayerState;

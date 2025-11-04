@@ -9,7 +9,10 @@ type SoundType =
   | "player-change"
   | "game-over"
   | "triple"
-  | "bull";
+  | "bull"
+  | "bust"
+  | "checkout"
+  | "high-score";
 
 export function useSounds() {
   const { volume, soundEnabled } = useSettings();
@@ -110,6 +113,28 @@ export function useSounds() {
         setTimeout(() => playBeep(659, 0.15, 0.3), 150);
         setTimeout(() => playBeep(784, 0.15, 0.3), 300);
         setTimeout(() => playBeep(1047, 0.4, 0.3), 450);
+        break;
+
+      case "bust":
+        // Bust - son descendant dramatique
+        setTimeout(() => playBeep(600, 0.1, 0.3), 0);
+        setTimeout(() => playBeep(400, 0.1, 0.3), 80);
+        setTimeout(() => playBeep(200, 0.2, 0.3), 160);
+        break;
+
+      case "checkout":
+        // Checkout (gagné) - fanfare
+        setTimeout(() => playBeep(659, 0.1, 0.3), 0);
+        setTimeout(() => playBeep(784, 0.1, 0.3), 100);
+        setTimeout(() => playBeep(988, 0.1, 0.3), 200);
+        setTimeout(() => playBeep(1319, 0.3, 0.3), 300);
+        break;
+
+      case "high-score":
+        // High score (180, etc.) - son impressionnant
+        setTimeout(() => playBeep(1000, 0.08, 0.3), 0);
+        setTimeout(() => playBeep(1200, 0.08, 0.3), 60);
+        setTimeout(() => playBeep(1400, 0.15, 0.3), 120);
         break;
     }
   };

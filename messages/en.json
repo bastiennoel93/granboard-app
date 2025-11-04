@@ -235,7 +235,8 @@
       "darts": "Darts",
       "quit": "Quit",
       "settings": "Settings",
-      "newGame": "New Game"
+      "newGame": "New Game",
+      "gameStats": "Game Statistics"
     },
     "legend": {
       "title": "Legend & Rules",

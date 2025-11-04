@@ -235,7 +235,8 @@
       "darts": "Fléchettes",
       "quit": "Quitter",
       "settings": "Paramètres",
-      "newGame": "Nouvelle partie"
+      "newGame": "Nouvelle partie",
+      "gameStats": "Statistiques de la partie"
     },
     "legend": {
       "title": "Légende et Règles",
