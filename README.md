@@ -172,7 +172,7 @@ pnpm test:e2e:debug    # Debug mode
 
 ## Roadmap
 
-- [ ] Add 01 game modes (301, 501, 701)
+- [x] Add 01 game modes (301, 501, 701)
 - [ ] Implement practice mode with training exercises
 - [ ] Add party games (Shanghai, Around the Clock, etc.)
 - [ ] Create match mode for tournaments
