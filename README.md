@@ -131,7 +131,7 @@ pnpm test:e2e:debug   # Debug E2E tests
 
 - **Framework:** [Next.js 16](https://nextjs.org/) - React framework with App Router
 - **Language:** [TypeScript](https://www.typescriptlang.org/) - Type-safe JavaScript
-- **Styling:** [Tailwind CSS](https://tailwindcss.com/) - Utility-first CSS framework
+- **Styling:** [Tailwind CSS v4](https://tailwindcss.com/) - Utility-first CSS framework
 - **Bluetooth:** [Web Bluetooth API](https://developer.mozilla.org/en-US/docs/Web/API/Web_Bluetooth_API) - Direct device communication
 - **Testing:** [Jest](https://jestjs.io/) + [Playwright](https://playwright.dev/) - Unit and E2E testing
 - **CI/CD:** [GitHub Actions](https://github.com/features/actions) - Automated testing and deployment
