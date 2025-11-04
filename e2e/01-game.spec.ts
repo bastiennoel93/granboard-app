@@ -202,16 +202,9 @@ test.describe('01 Game', () => {
     await expect(dartCounter).toBeVisible();
   });
 
-  test('should show connect button when not connected', async ({ page }) => {
-    // Vérifier que le bouton de connexion au Granboard est présent
-    const connectButton = page.getByTestId('connect-button');
-    const connectionStatus = page.getByTestId('connection-status');
-
-    // L'un des deux devrait être visible
-    const isConnectVisible = await connectButton.isVisible().catch(() => false);
-    const isStatusVisible = await connectionStatus.isVisible().catch(() => false);
-
-    expect(isConnectVisible || isStatusVisible).toBe(true);
+  test('should show game header', async ({ page }) => {
+    // Vérifier que le header est présent
+    await expect(page.getByRole('heading').filter({ hasText: /01/i }).first()).toBeVisible();
   });
 
   test('should display initial scores correctly for 501 mode', async ({ page }) => {

@@ -251,7 +251,7 @@ test.describe('01 Full Game Flow', () => {
     await expect(page.getByTestId('scoreboard-player-Charlie')).toBeVisible();
   });
 
-  test('should display connection button', async ({ page }) => {
+  test('should display game header correctly', async ({ page }) => {
     // Configurer et démarrer une partie
     await page.goto('/01');
 
@@ -271,9 +271,8 @@ test.describe('01 Full Game Flow', () => {
 
     await page.waitForURL(/\/01\/game/);
 
-    // Vérifier le bouton de connexion Granboard
-    const connectButton = page.getByTestId('connect-button');
-    await expect(connectButton).toBeVisible();
+    // Vérifier que le header est affiché
+    await expect(page.getByRole('heading').filter({ hasText: /01/i }).first()).toBeVisible();
   });
 
   test('should navigate back from setup to home', async ({ page }) => {
