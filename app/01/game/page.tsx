@@ -3,6 +3,8 @@
 import { useEffect, useState, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
+import { SEGMENT_SECTIONS, SEGMENT_TYPES } from "@/constants/segments";
+import { ANIMATION_TIMINGS } from "@/constants/animations";
 import {
   Player,
   ZeroOneMode,
@@ -142,13 +144,13 @@ export default function ZeroOneGame() {
     const previousScore = previousState?.players[currentPlayerIndex].currentScore ?? 0;
 
     // Play sound based on segment type
-    if (segment.Section === 26) {
-      // Miss (Section = 26 = SegmentSection.Other)
+    if (segment.Section === SEGMENT_SECTIONS.MISS) {
+      // Miss
       playSound("dart-miss");
-    } else if (segment.Section === 25 && segment.Type === 2) {
+    } else if (segment.Section === SEGMENT_SECTIONS.BULL && segment.Type === SEGMENT_TYPES.DOUBLE) {
       // Double Bull
       playSound("double-bull");
-    } else if (segment.Section === 25) {
+    } else if (segment.Section === SEGMENT_SECTIONS.BULL) {
       // Bull
       playSound("bull");
     }
@@ -181,32 +183,24 @@ export default function ZeroOneGame() {
 
   // Trigger animations after 3rd dart (with delay after hit animation)
   useEffect(() => {
-    console.log("Animation check (01):", {
-      dartsThrown: gameState?.dartsThrown,
-      currentTurnHitsLength: currentTurnHits.length,
-      hits: currentTurnHits
-    });
-
     if (gameState && gameState.dartsThrown === 3 && currentTurnHits.length === 3) {
-      // Wait for hit animation to finish (1 second delay)
+      // Wait for hit animation to finish
       const timer = setTimeout(() => {
         // Animation priority system (only one animation at a time)
         const hits = currentTurnHits;
 
         // Priority 1: Victory (handled elsewhere when score reaches 0)
         // Priority 2: Three misses (Goat)
-        // Note: Miss has Section = 26 (SegmentSection.Other)
-        if (hits.every((hit) => hit.Section === 26)) {
-          console.log("Playing goat animation (01)!");
+        if (hits.every((hit) => hit.Section === SEGMENT_SECTIONS.MISS)) {
           playSound("goat");
           playAnimation("three-miss");
         }
         // Priority 3: Three triples (Unicorn)
-        else if (hits.every((hit) => hit.Type === 3)) {
+        else if (hits.every((hit) => hit.Type === SEGMENT_TYPES.TRIPLE)) {
           playSound("horse");
           playAnimation("three-triple");
         }
-      }, 1000);
+      }, ANIMATION_TIMINGS.HIT_ANIMATION_DELAY);
 
       return () => clearTimeout(timer);
     }
