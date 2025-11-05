@@ -103,7 +103,7 @@ export function useAnimations() {
     if (!currentAnimation) return null;
 
     return (
-      <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm">
+      <div className="fixed inset-0 z-[10000] flex items-center justify-center bg-black/80 backdrop-blur-sm">
         <div
           className={
             currentAnimation.type === "hit-sequence" ? "" : "animate-bounce-in"
