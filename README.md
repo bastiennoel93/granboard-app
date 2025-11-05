@@ -7,6 +7,41 @@ A modern, feature-rich web application for Granboard electronic dartboards, buil
 [![Next.js](https://img.shields.io/badge/Next.js-16.0-black)](https://nextjs.org/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue)](https://www.typescriptlang.org/)
 
+## Screenshots
+
+<table>
+  <tr>
+    <td width="50%">
+      <img src="docs/screenshots/home.png" alt="Home Screen" />
+      <p align="center"><b>Home - Game Mode Selection</b></p>
+    </td>
+    <td width="50%">
+      <img src="docs/screenshots/cricket-setup.png" alt="Cricket Setup" />
+      <p align="center"><b>Cricket - Player Setup</b></p>
+    </td>
+  </tr>
+  <tr>
+    <td width="50%">
+      <img src="docs/screenshots/cricket-game.png" alt="Cricket Game" />
+      <p align="center"><b>Cricket - In-Game View</b></p>
+    </td>
+    <td width="50%">
+      <img src="docs/screenshots/01-game.png" alt="01 Game" />
+      <p align="center"><b>01 Game - Scoreboard</b></p>
+    </td>
+  </tr>
+  <tr>
+    <td width="50%">
+      <img src="docs/screenshots/animations.png" alt="Game Animations" />
+      <p align="center"><b>Special Animations (Three in a Bed, etc.)</b></p>
+    </td>
+    <td width="50%">
+      <img src="docs/screenshots/settings.png" alt="Settings" />
+      <p align="center"><b>Settings & Theme Toggle</b></p>
+    </td>
+  </tr>
+</table>
+
 ## Features
 
 ### Available Game Modes
