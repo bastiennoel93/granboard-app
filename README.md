@@ -32,12 +32,8 @@ A modern, feature-rich web application for Granboard electronic dartboards, buil
   </tr>
   <tr>
     <td width="50%">
-      <img src="docs/screenshots/animations.png" alt="Game Animations" />
-      <p align="center"><b>Special Animations (Three in a Bed, etc.)</b></p>
-    </td>
-    <td width="50%">
       <img src="docs/screenshots/settings.png" alt="Settings" />
-      <p align="center"><b>Settings & Theme Toggle</b></p>
+      <p align="center"><b>Settings</b></p>
     </td>
   </tr>
 </table>
