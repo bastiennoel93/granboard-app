@@ -20,6 +20,7 @@ import { useZeroOneGameState } from "./hooks/useZeroOneGameState";
 import { usePlayerTurnHistory } from "../../cricket/game/hooks/usePlayerTurnHistory";
 import { useSounds } from "../../cricket/game/hooks/useSounds";
 import { useSettings } from "@/app/contexts/SettingsContext";
+import { useAnimations } from "@/app/hooks/useAnimations";
 
 // Components
 import { GameHeader } from "../../cricket/game/components/GameHeader";
@@ -46,6 +47,9 @@ export default function ZeroOneGame() {
 
   // Sound effects
   const { playSound } = useSounds();
+
+  // Animations
+  const { playAnimation, AnimationOverlay } = useAnimations();
 
   // Player turn history (declare first to use in callbacks)
   const { addTurn, getPlayerHistory } = usePlayerTurnHistory();
@@ -81,11 +85,9 @@ export default function ZeroOneGame() {
         addTurnRef.current(playerState.player, gameStateRef.current.currentRound, hits);
       }
 
-      // Play sounds
+      // Play sound when game is finished
       if (isGameFinished) {
         playSound("game-over");
-      } else {
-        playSound("player-change");
       }
 
       // Show turn summary when player finishes turn (except if game is finished)
@@ -143,15 +145,12 @@ export default function ZeroOneGame() {
     if (segment.Section === 0) {
       // Miss
       playSound("dart-miss");
-    } else if (segment.Type === 3) {
-      // Triple
-      playSound("triple");
+    } else if (segment.Section === 25 && segment.Type === 2) {
+      // Double Bull
+      playSound("double-bull");
     } else if (segment.Section === 25) {
       // Bull
       playSound("bull");
-    } else {
-      // Normal hit
-      playSound("dart-hit");
     }
 
     // Process the hit
@@ -166,18 +165,12 @@ export default function ZeroOneGame() {
 
       // Check for bust (score went back to previous)
       if (newScore === previousScore && gameState.dartsThrown === 3) {
-        playSound("bust");
+        playSound("game-over");
       }
 
-      // Check for checkout (score reached 0)
+      // Check for victory (score reached 0)
       if (newScore === 0) {
-        playSound("checkout");
-      }
-
-      // Check for high score (180)
-      const dartValue = calculateDartValue(segment);
-      if (dartValue >= 60) {
-        playSound("high-score");
+        playSound("victory");
       }
     }, 100);
   };
@@ -185,6 +178,29 @@ export default function ZeroOneGame() {
   // Granboard connection management
   const { connectionState, connectToBoard } =
     useGranboardConnection(handleSegmentHitWithSound);
+
+  // Trigger animations after 3rd dart (with delay after hit animation)
+  useEffect(() => {
+    if (gameState && gameState.dartsThrown === 3 && currentTurnHits.length === 3) {
+      // Wait for hit animation to finish (1 second delay)
+      const timer = setTimeout(() => {
+        // Animation priority system (only one animation at a time)
+        const hits = currentTurnHits;
+
+        // Priority 1: Victory (handled elsewhere when score reaches 0)
+        // Priority 2: Three triples (Unicorn)
+        if (hits.every((hit) => hit.Type === 3)) {
+          playAnimation("three-triple");
+        }
+        // Priority 3: Three misses (Goat)
+        else if (hits.every((hit) => hit.Section === 0)) {
+          playAnimation("three-miss");
+        }
+      }, 1000);
+
+      return () => clearTimeout(timer);
+    }
+  }, [gameState, currentTurnHits, playAnimation]);
 
   // Close turn summary when next player throws a dart
   useEffect(() => {
@@ -254,6 +270,9 @@ export default function ZeroOneGame() {
 
   return (
     <main className="h-screen bg-theme-primary flex flex-col px-4 py-3 gap-3 overflow-hidden">
+      {/* Animations overlay */}
+      <AnimationOverlay />
+
       <GameHeader
         gameMode={gameState.mode}
         connectionState={connectionState}

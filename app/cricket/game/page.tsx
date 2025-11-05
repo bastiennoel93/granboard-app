@@ -19,6 +19,7 @@ import { useCricketGameState } from "./hooks/useCricketGameState";
 import { usePlayerTurnHistory } from "./hooks/usePlayerTurnHistory";
 import { useSounds } from "./hooks/useSounds";
 import { useSettings } from "@/app/contexts/SettingsContext";
+import { useAnimations } from "@/app/hooks/useAnimations";
 
 // Components
 import { GameHeader } from "./components/GameHeader";
@@ -48,6 +49,9 @@ export default function CricketGame() {
   // Sound effects
   const { playSound } = useSounds();
 
+  // Animations
+  const { playAnimation, AnimationOverlay } = useAnimations();
+
   // Player turn history (declare first to use in callbacks)
   const { addTurn, getPlayerHistory } = usePlayerTurnHistory();
 
@@ -55,6 +59,7 @@ export default function CricketGame() {
   const addTurnRef = useRef(addTurn);
   const gameStateRef = useRef<CricketGameState | null>(null);
   const saveCurrentTurnHitsRef = useRef<((hits: Segment[]) => void) | null>(null);
+  const turnStartStateRef = useRef<CricketGameState | null>(null);
 
   useEffect(() => {
     addTurnRef.current = addTurn;
@@ -82,11 +87,9 @@ export default function CricketGame() {
         addTurnRef.current(playerState.player, gameStateRef.current.currentRound, hits);
       }
 
-      // Play sounds
+      // Play sound when game is finished
       if (isGameFinished) {
         playSound("game-over");
-      } else {
-        playSound("player-change");
       }
 
       // Show turn summary when player finishes turn (except if game is finished)
@@ -100,6 +103,13 @@ export default function CricketGame() {
   // Update refs when gameState changes
   useEffect(() => {
     gameStateRef.current = gameState;
+  }, [gameState]);
+
+  // Save game state at the start of each turn (first dart)
+  useEffect(() => {
+    if (gameState && gameState.dartsThrown === 1) {
+      turnStartStateRef.current = cloneGameState(gameState);
+    }
   }, [gameState]);
 
   // Initialize game state from session storage
@@ -134,48 +144,49 @@ export default function CricketGame() {
 
   // Wrapper for segment hit with sound effects
   const handleSegmentHitWithSound = (segment: any) => {
-    // Store previous state to check for number closure
-    const previousState = gameState ? { ...gameState } : null;
+    // Store previous state with deep clone to check for number closure
+    const previousState = gameState ? cloneGameState(gameState) : null;
     const currentPlayerIndex = gameState?.currentPlayerIndex ?? 0;
 
     // Play sound based on segment type
     if (segment.Section === 0) {
       // Miss
       playSound("dart-miss");
-    } else if (segment.Type === 3) {
-      // Triple
-      playSound("triple");
+    } else if (segment.Section === 25 && segment.Type === 2) {
+      // Double Bull
+      playSound("double-bull");
     } else if (segment.Section === 25) {
       // Bull
       playSound("bull");
-    } else {
-      // Normal hit
-      playSound("dart-hit");
     }
 
     // Process the hit
     onSegmentHit(segment);
 
-    // Check after state update if a number was closed
+    // Check if hit is on a number that still counts in the game (whistle sounds)
     setTimeout(() => {
-      if (!previousState || !gameState) return;
+      if (!previousState) return;
 
       const cricketNumbers = [15, 16, 17, 18, 19, 20, 25];
       const hitNumber = segment.Section;
 
       if (cricketNumbers.includes(hitNumber)) {
-        const previousMarks = previousState.players[currentPlayerIndex].scores.get(hitNumber)?.marks ?? 0;
-        const newMarks = gameState.players[currentPlayerIndex].scores.get(hitNumber)?.marks ?? 0;
+        // Check if this number was still in play BEFORE the hit (not everyone had closed it)
+        const allPlayersClosed = previousState.players.every(p => (p.scores.get(hitNumber)?.marks ?? 0) >= 3);
 
-        // Number just closed (went from < 3 to >= 3)
-        if (previousMarks < 3 && newMarks >= 3) {
-          // Check if all players have closed this number
-          const allClosed = gameState.players.every(p => (p.scores.get(hitNumber)?.marks ?? 0) >= 3);
+        console.log(`Hit ${hitNumber} Type ${segment.Type}, allPlayersClosed (BEFORE hit): ${allPlayersClosed}`);
 
-          if (allClosed) {
-            playSound("all-closed");
+        // Play whistle if the number still counted in the game
+        if (!allPlayersClosed) {
+          if (segment.Type === 3) {
+            console.log("Playing whistle-triple");
+            playSound("whistle-triple");
+          } else if (segment.Type === 2) {
+            console.log("Playing whistle-double");
+            playSound("whistle-double");
           } else {
-            playSound("number-closed");
+            console.log("Playing whistle-single");
+            playSound("whistle-single");
           }
         }
       }
@@ -185,6 +196,62 @@ export default function CricketGame() {
   // Granboard connection management
   const { connectionState, connectToBoard } =
     useGranboardConnection(handleSegmentHitWithSound);
+
+  // Trigger animations after 3rd dart (with delay after hit animation)
+  useEffect(() => {
+    if (gameState && gameState.dartsThrown === 3 && currentTurnHits.length === 3 && turnStartStateRef.current) {
+      // Wait for hit animation to finish (1 second delay)
+      const timer = setTimeout(() => {
+        // Animation priority system (only one animation at a time)
+        const hits = currentTurnHits;
+        const validCricketSections = [15, 16, 17, 18, 19, 20, 25];
+        const turnStartState = turnStartStateRef.current!;
+
+        // Priority 1: Victory (handled elsewhere via isGameFinished)
+
+        // Priority 2: Three triples that count (Unicorn)
+        if (hits.every((hit) => hit.Type === 3)) {
+          // Check if all 3 triples are on valid Cricket numbers that counted at turn start
+          const allTriplesCount = hits.every((hit) => {
+            if (!validCricketSections.includes(hit.Section)) return false;
+
+            // Check if number was still in play at the START of the turn
+            const allPlayersClosed = turnStartState.players.every(
+              (p) => (p.scores.get(hit.Section)?.marks ?? 0) >= 3
+            );
+            return !allPlayersClosed;
+          });
+
+          if (allTriplesCount) {
+            playAnimation("three-triple");
+          }
+        }
+        // Priority 3: Three misses (Goat)
+        else if (hits.every((hit) => hit.Section === 0)) {
+          playAnimation("three-miss");
+        }
+        // Priority 4: Hit sequence (3 valid Cricket hits that counted at turn start)
+        else {
+          const allValidHits = hits.every((hit) => {
+            if (hit.Section === 0) return false;
+            if (!validCricketSections.includes(hit.Section)) return false;
+
+            // Check if number was still in play at the START of the turn
+            const allPlayersClosed = turnStartState.players.every(
+              (p) => (p.scores.get(hit.Section)?.marks ?? 0) >= 3
+            );
+            return !allPlayersClosed;
+          });
+
+          if (allValidHits) {
+            playAnimation("hit-sequence", hits, 3500);
+          }
+        }
+      }, 1000);
+
+      return () => clearTimeout(timer);
+    }
+  }, [gameState, currentTurnHits, playAnimation]);
 
   // Close turn summary when next player throws a dart
   useEffect(() => {
@@ -257,6 +324,9 @@ export default function CricketGame() {
 
   return (
     <main className="h-screen bg-theme-primary flex flex-col px-4 py-3 gap-3 overflow-hidden">
+      {/* Animations overlay */}
+      <AnimationOverlay />
+
       <GameHeader
         gameMode={gameState.mode}
         connectionState={connectionState}
