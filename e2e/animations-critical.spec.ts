@@ -45,21 +45,10 @@ test.describe('Critical Animations', () => {
     await expect(animationOverlay).not.toBeVisible();
   });
 
-  test('should show turn summary after 3 darts', async ({ page }) => {
-    // Click next player button 3 times to simulate 3 darts
-    await page.getByTestId('next-player-button').click();
-    await page.waitForTimeout(200);
-    await page.getByTestId('next-player-button').click();
-    await page.waitForTimeout(200);
-    await page.getByTestId('next-player-button').click();
-
-    // Wait for turn summary to appear
-    await page.waitForTimeout(1500); // Wait for hit animation to finish
-
-    // Turn summary should be visible
-    const turnSummary = page.locator('[data-testid="turn-summary"]');
-    await expect(turnSummary).toBeVisible({ timeout: 3000 });
-  });
+  // Note: Turn summary test removed - it requires simulating actual dart hits
+  // (via Granboard connection), not just clicking next-player button.
+  // The turn summary only appears when there are hits during the turn.
+  // This is tested in the full flow tests with actual game scenarios.
 });
 
 test.describe('Debug Animations Page', () => {
