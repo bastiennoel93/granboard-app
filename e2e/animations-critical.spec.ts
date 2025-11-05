@@ -92,7 +92,7 @@ test.describe('Debug Animations Page', () => {
     await expect(animationOverlay).toBeVisible({ timeout: 1000 });
 
     // Check for goat emoji
-    await expect(page.locator('.animate-rainbow').filter({ hasText: '🐐' })).toBeVisible();
+    await expect(page.locator('.animate-shake').filter({ hasText: '🐐' })).toBeVisible();
     await expect(page.locator('text=BÊÊÊÊÊ!')).toBeVisible();
 
     // Wait for animation to finish and disappear
@@ -131,7 +131,7 @@ test.describe('Debug Animations Page', () => {
     await expect(animationOverlay).toBeVisible({ timeout: 1000 });
 
     // Check for trophy emoji
-    await expect(page.locator('.animate-rainbow').filter({ hasText: '🏆' })).toBeVisible();
+    await expect(page.locator('.animate-trophy').filter({ hasText: '🏆' })).toBeVisible();
     await expect(page.locator('text=VICTOIRE!')).toBeVisible();
 
     // Wait for animation to finish
@@ -179,6 +179,6 @@ test.describe('Debug Animations Page', () => {
 
     // Only unicorn animation should be visible (replaces goat)
     await expect(page.locator('.animate-rainbow').filter({ hasText: '🦄' })).toBeVisible();
-    await expect(page.locator('.animate-rainbow').filter({ hasText: '🐐' })).not.toBeVisible();
+    await expect(page.locator('.animate-shake').filter({ hasText: '🐐' })).not.toBeVisible();
   });
 });
