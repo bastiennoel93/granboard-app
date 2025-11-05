@@ -72,7 +72,7 @@ test.describe('Debug Animations Page', () => {
     // Check that all animation buttons are present
     await expect(page.getByText('3 Miss - Chèvre')).toBeVisible();
     await expect(page.getByText('3 Triples - Licorne')).toBeVisible();
-    await expect(page.getByText('Victoire')).toBeVisible();
+    await expect(page.getByRole('button', { name: /Victoire/ })).toBeVisible();
 
     // Check hit-sequence buttons
     await expect(page.getByText('Séquence 3 Simples')).toBeVisible();
