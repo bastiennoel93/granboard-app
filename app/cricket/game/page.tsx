@@ -149,8 +149,8 @@ export default function CricketGame() {
     const currentPlayerIndex = gameState?.currentPlayerIndex ?? 0;
 
     // Play sound based on segment type
-    if (segment.Section === 0) {
-      // Miss
+    if (segment.Section === 26) {
+      // Miss (Section = 26 = SegmentSection.Other)
       playSound("dart-miss");
     } else if (segment.Section === 25 && segment.Type === 2) {
       // Double Bull
@@ -199,18 +199,32 @@ export default function CricketGame() {
 
   // Trigger animations after 3rd dart (with delay after hit animation)
   useEffect(() => {
-    if (gameState && gameState.dartsThrown === 3 && currentTurnHits.length === 3 && turnStartStateRef.current) {
+    console.log("Animation check:", {
+      dartsThrown: gameState?.dartsThrown,
+      currentTurnHitsLength: currentTurnHits.length,
+      hasTurnStartState: !!turnStartStateRef.current,
+      hits: currentTurnHits
+    });
+
+    if (gameState && gameState.dartsThrown === 3 && currentTurnHits.length === 3) {
       // Wait for hit animation to finish (1 second delay)
       const timer = setTimeout(() => {
         // Animation priority system (only one animation at a time)
         const hits = currentTurnHits;
         const validCricketSections = [15, 16, 17, 18, 19, 20, 25];
-        const turnStartState = turnStartStateRef.current!;
+        const turnStartState = turnStartStateRef.current;
 
         // Priority 1: Victory (handled elsewhere via isGameFinished)
 
-        // Priority 2: Three triples that count (Unicorn)
-        if (hits.every((hit) => hit.Type === 3)) {
+        // Priority 2: Three misses (Goat) - doesn't need turnStartState check
+        // Note: Miss has Section = 26 (SegmentSection.Other)
+        if (hits.every((hit) => hit.Section === 26)) {
+          console.log("Playing goat animation!");
+          playSound("goat");
+          playAnimation("three-miss");
+        }
+        // Priority 3: Three triples that count (Unicorn) - needs turnStartState
+        else if (turnStartState && hits.every((hit) => hit.Type === 3)) {
           // Check if all 3 triples are on valid Cricket numbers that counted at turn start
           const allTriplesCount = hits.every((hit) => {
             if (!validCricketSections.includes(hit.Section)) return false;
@@ -226,14 +240,10 @@ export default function CricketGame() {
             playAnimation("three-triple");
           }
         }
-        // Priority 3: Three misses (Goat)
-        else if (hits.every((hit) => hit.Section === 0)) {
-          playAnimation("three-miss");
-        }
-        // Priority 4: Hit sequence (3 valid Cricket hits that counted at turn start)
-        else {
+        // Priority 4: Hit sequence (3 valid Cricket hits that counted at turn start) - needs turnStartState
+        else if (turnStartState) {
           const allValidHits = hits.every((hit) => {
-            if (hit.Section === 0) return false;
+            if (hit.Section === 26) return false; // Exclude miss
             if (!validCricketSections.includes(hit.Section)) return false;
 
             // Check if number was still in play at the START of the turn

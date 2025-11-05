@@ -142,8 +142,8 @@ export default function ZeroOneGame() {
     const previousScore = previousState?.players[currentPlayerIndex].currentScore ?? 0;
 
     // Play sound based on segment type
-    if (segment.Section === 0) {
-      // Miss
+    if (segment.Section === 26) {
+      // Miss (Section = 26 = SegmentSection.Other)
       playSound("dart-miss");
     } else if (segment.Section === 25 && segment.Type === 2) {
       // Double Bull
@@ -181,6 +181,12 @@ export default function ZeroOneGame() {
 
   // Trigger animations after 3rd dart (with delay after hit animation)
   useEffect(() => {
+    console.log("Animation check (01):", {
+      dartsThrown: gameState?.dartsThrown,
+      currentTurnHitsLength: currentTurnHits.length,
+      hits: currentTurnHits
+    });
+
     if (gameState && gameState.dartsThrown === 3 && currentTurnHits.length === 3) {
       // Wait for hit animation to finish (1 second delay)
       const timer = setTimeout(() => {
@@ -188,13 +194,16 @@ export default function ZeroOneGame() {
         const hits = currentTurnHits;
 
         // Priority 1: Victory (handled elsewhere when score reaches 0)
-        // Priority 2: Three triples (Unicorn)
-        if (hits.every((hit) => hit.Type === 3)) {
-          playAnimation("three-triple");
-        }
-        // Priority 3: Three misses (Goat)
-        else if (hits.every((hit) => hit.Section === 0)) {
+        // Priority 2: Three misses (Goat)
+        // Note: Miss has Section = 26 (SegmentSection.Other)
+        if (hits.every((hit) => hit.Section === 26)) {
+          console.log("Playing goat animation (01)!");
+          playSound("goat");
           playAnimation("three-miss");
+        }
+        // Priority 3: Three triples (Unicorn)
+        else if (hits.every((hit) => hit.Type === 3)) {
+          playAnimation("three-triple");
         }
       }, 1000);
 
