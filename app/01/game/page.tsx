@@ -203,6 +203,7 @@ export default function ZeroOneGame() {
         }
         // Priority 3: Three triples (Unicorn)
         else if (hits.every((hit) => hit.Type === 3)) {
+          playSound("horse");
           playAnimation("three-triple");
         }
       }, 1000);

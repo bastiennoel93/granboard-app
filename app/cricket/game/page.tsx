@@ -237,6 +237,7 @@ export default function CricketGame() {
           });
 
           if (allTriplesCount) {
+            playSound("horse");
             playAnimation("three-triple");
           }
         }

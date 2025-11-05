@@ -10,7 +10,8 @@ type SoundType =
   | "whistle-single"
   | "whistle-double"
   | "whistle-triple"
-  | "goat";
+  | "goat"
+  | "horse";
 
 export function useSounds() {
   const { volume, soundEnabled } = useSettings();
@@ -22,6 +23,7 @@ export function useSounds() {
   const bullAudioRef = useRef<HTMLAudioElement | null>(null);
   const doubleBullAudioRef = useRef<HTMLAudioElement | null>(null);
   const goatAudioRef = useRef<HTMLAudioElement | null>(null);
+  const horseAudioRef = useRef<HTMLAudioElement | null>(null);
 
   useEffect(() => {
     // Initialize AudioContext on first user interaction
@@ -71,6 +73,12 @@ export function useSounds() {
       if (!goatAudioRef.current) {
         goatAudioRef.current = new Audio("/assets/songs/goat.mp3");
         goatAudioRef.current.preload = "auto";
+      }
+
+      // Preload horse sound
+      if (!horseAudioRef.current) {
+        horseAudioRef.current = new Audio("/assets/songs/horse.mp3");
+        horseAudioRef.current.preload = "auto";
       }
     };
 
@@ -182,6 +190,10 @@ export function useSounds() {
       goatAudioRef.current = new Audio("/assets/songs/goat.mp3");
       goatAudioRef.current.preload = "auto";
     }
+    if (!horseAudioRef.current) {
+      horseAudioRef.current = new Audio("/assets/songs/horse.mp3");
+      horseAudioRef.current.preload = "auto";
+    }
 
     switch (type) {
       case "dart-miss":
@@ -263,6 +275,17 @@ export function useSounds() {
           goatAudioRef.current.volume = volume;
           goatAudioRef.current.currentTime = 0;
           goatAudioRef.current.play().catch(() => {
+            // Ignore errors if audio can't play
+          });
+        }
+        break;
+
+      case "horse":
+        // Jouer le fichier audio horse MP3
+        if (horseAudioRef.current) {
+          horseAudioRef.current.volume = volume;
+          horseAudioRef.current.currentTime = 0;
+          horseAudioRef.current.play().catch(() => {
             // Ignore errors if audio can't play
           });
         }
