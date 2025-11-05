@@ -119,7 +119,7 @@ export default function SoundsDebugPage() {
           </button>
           <h1 className="text-5xl font-bold text-white mb-2">🎵 Debug Sons</h1>
           <p className="text-purple-200">
-            Testez tous les sons de l'application
+            Testez tous les sons de l&apos;application
           </p>
         </div>
 

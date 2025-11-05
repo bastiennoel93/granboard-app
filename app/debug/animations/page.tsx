@@ -109,7 +109,7 @@ export default function AnimationsDebugPage() {
             🎬 Debug Animations
           </h1>
           <p className="text-purple-200">
-            Testez toutes les animations de l'application
+            Testez toutes les animations de l&apos;application
           </p>
         </div>
 

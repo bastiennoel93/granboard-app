@@ -204,7 +204,7 @@ export default function ZeroOneGame() {
 
       return () => clearTimeout(timer);
     }
-  }, [gameState, currentTurnHits, playAnimation]);
+  }, [gameState, currentTurnHits, playAnimation, playSound]);
 
   // Close turn summary when next player throws a dart
   useEffect(() => {
