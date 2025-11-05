@@ -3,11 +3,14 @@
 import { useEffect, useState, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
+import { SEGMENT_SECTIONS, SEGMENT_TYPES, CRICKET_NUMBERS } from "@/constants/segments";
+import { ANIMATION_TIMINGS } from "@/constants/animations";
 import {
   Player,
   CricketGameMode,
   CricketGameState,
   createInitialGameState,
+  cloneGameState,
 } from "@/services/cricket";
 import { Segment } from "@/services/boardinfo";
 
@@ -18,6 +21,7 @@ import { useCricketGameState } from "./hooks/useCricketGameState";
 import { usePlayerTurnHistory } from "./hooks/usePlayerTurnHistory";
 import { useSounds } from "./hooks/useSounds";
 import { useSettings } from "@/app/contexts/SettingsContext";
+import { useAnimations } from "@/app/hooks/useAnimations";
 
 // Components
 import { GameHeader } from "./components/GameHeader";
@@ -47,6 +51,9 @@ export default function CricketGame() {
   // Sound effects
   const { playSound } = useSounds();
 
+  // Animations
+  const { playAnimation, AnimationOverlay } = useAnimations();
+
   // Player turn history (declare first to use in callbacks)
   const { addTurn, getPlayerHistory } = usePlayerTurnHistory();
 
@@ -54,6 +61,7 @@ export default function CricketGame() {
   const addTurnRef = useRef(addTurn);
   const gameStateRef = useRef<CricketGameState | null>(null);
   const saveCurrentTurnHitsRef = useRef<((hits: Segment[]) => void) | null>(null);
+  const turnStartStateRef = useRef<CricketGameState | null>(null);
 
   useEffect(() => {
     addTurnRef.current = addTurn;
@@ -81,11 +89,9 @@ export default function CricketGame() {
         addTurnRef.current(playerState.player, gameStateRef.current.currentRound, hits);
       }
 
-      // Play sounds
+      // Play sound when game is finished
       if (isGameFinished) {
         playSound("game-over");
-      } else {
-        playSound("player-change");
       }
 
       // Show turn summary when player finishes turn (except if game is finished)
@@ -99,6 +105,13 @@ export default function CricketGame() {
   // Update refs when gameState changes
   useEffect(() => {
     gameStateRef.current = gameState;
+  }, [gameState]);
+
+  // Save game state at the start of each turn (first dart)
+  useEffect(() => {
+    if (gameState && gameState.dartsThrown === 1) {
+      turnStartStateRef.current = cloneGameState(gameState);
+    }
   }, [gameState]);
 
   // Initialize game state from session storage
@@ -122,7 +135,8 @@ export default function CricketGame() {
   // Game history management
   const { hasHistory, saveCurrentTurnHits, undoLastAction } = useGameHistory(
     gameState,
-    currentTurnHits
+    currentTurnHits,
+    cloneGameState
   );
 
   // Update saveCurrentTurnHits ref
@@ -132,57 +146,111 @@ export default function CricketGame() {
 
   // Wrapper for segment hit with sound effects
   const handleSegmentHitWithSound = (segment: any) => {
-    // Store previous state to check for number closure
-    const previousState = gameState ? { ...gameState } : null;
+    // Store previous state with deep clone to check for number closure
+    const previousState = gameState ? cloneGameState(gameState) : null;
     const currentPlayerIndex = gameState?.currentPlayerIndex ?? 0;
 
     // Play sound based on segment type
-    if (segment.Section === 0) {
+    if (segment.Section === SEGMENT_SECTIONS.MISS) {
       // Miss
       playSound("dart-miss");
-    } else if (segment.Type === 3) {
-      // Triple
-      playSound("triple");
-    } else if (segment.Section === 25) {
+    } else if (segment.Section === SEGMENT_SECTIONS.BULL && segment.Type === SEGMENT_TYPES.DOUBLE) {
+      // Double Bull
+      playSound("double-bull");
+    } else if (segment.Section === SEGMENT_SECTIONS.BULL) {
       // Bull
       playSound("bull");
-    } else {
-      // Normal hit
-      playSound("dart-hit");
     }
 
     // Process the hit
     onSegmentHit(segment);
 
-    // Check after state update if a number was closed
+    // Check if hit is on a number that still counts in the game (whistle sounds)
     setTimeout(() => {
-      if (!previousState || !gameState) return;
+      if (!previousState) return;
 
-      const cricketNumbers = [15, 16, 17, 18, 19, 20, 25];
       const hitNumber = segment.Section;
 
-      if (cricketNumbers.includes(hitNumber)) {
-        const previousMarks = previousState.players[currentPlayerIndex].scores.get(hitNumber)?.marks ?? 0;
-        const newMarks = gameState.players[currentPlayerIndex].scores.get(hitNumber)?.marks ?? 0;
+      if (CRICKET_NUMBERS.includes(hitNumber as any)) {
+        // Check if this number was still in play BEFORE the hit (not everyone had closed it)
+        const allPlayersClosed = previousState.players.every(p => (p.scores.get(hitNumber)?.marks ?? 0) >= 3);
 
-        // Number just closed (went from < 3 to >= 3)
-        if (previousMarks < 3 && newMarks >= 3) {
-          // Check if all players have closed this number
-          const allClosed = gameState.players.every(p => (p.scores.get(hitNumber)?.marks ?? 0) >= 3);
-
-          if (allClosed) {
-            playSound("all-closed");
+        // Play whistle if the number still counted in the game
+        if (!allPlayersClosed) {
+          if (segment.Type === SEGMENT_TYPES.TRIPLE) {
+            playSound("whistle-triple");
+          } else if (segment.Type === SEGMENT_TYPES.DOUBLE) {
+            playSound("whistle-double");
           } else {
-            playSound("number-closed");
+            playSound("whistle-single");
           }
         }
       }
-    }, 100);
+    }, ANIMATION_TIMINGS.STATE_CHECK_DELAY);
   };
 
   // Granboard connection management
   const { connectionState, connectToBoard } =
     useGranboardConnection(handleSegmentHitWithSound);
+
+  // Trigger animations after 3rd dart (with delay after hit animation)
+  useEffect(() => {
+    if (gameState && gameState.dartsThrown === 3 && currentTurnHits.length === 3) {
+      // Wait for hit animation to finish
+      const timer = setTimeout(() => {
+        // Animation priority system (only one animation at a time)
+        const hits = currentTurnHits;
+        const turnStartState = turnStartStateRef.current;
+
+        // Priority 1: Victory (handled elsewhere via isGameFinished)
+
+        // Priority 2: Three misses (Goat) - doesn't need turnStartState check
+        if (hits.every((hit) => hit.Section === SEGMENT_SECTIONS.MISS)) {
+          playSound("goat");
+          playAnimation("three-miss");
+        }
+        // Priority 3: Three triples that count (Unicorn) - needs turnStartState
+        else if (turnStartState && hits.every((hit) => hit.Type === SEGMENT_TYPES.TRIPLE)) {
+          // Check if all 3 triples are on valid Cricket numbers that counted at turn start
+          const allTriplesCount = hits.every((hit) => {
+            const section = hit.Section as number;
+            if (!CRICKET_NUMBERS.includes(section as any)) return false;
+
+            // Check if number was still in play at the START of the turn
+            const allPlayersClosed = turnStartState.players.every(
+              (p) => (p.scores.get(section as any)?.marks ?? 0) >= 3
+            );
+            return !allPlayersClosed;
+          });
+
+          if (allTriplesCount) {
+            playSound("horse");
+            playAnimation("three-triple");
+          }
+        }
+        // Priority 4: Hit sequence (3 valid Cricket hits that counted at turn start) - needs turnStartState
+        else if (turnStartState) {
+          const allValidHits = hits.every((hit) => {
+            if (hit.Section === SEGMENT_SECTIONS.MISS) return false; // Exclude miss
+            const section = hit.Section as number;
+            if (!CRICKET_NUMBERS.includes(section as any)) return false;
+
+            // Check if number was still in play at the START of the turn
+            const allPlayersClosed = turnStartState.players.every(
+              (p) => (p.scores.get(section as any)?.marks ?? 0) >= 3
+            );
+            return !allPlayersClosed;
+          });
+
+          if (allValidHits) {
+            playAnimation("hit-sequence", hits, ANIMATION_TIMINGS.HIT_SEQUENCE_DURATION);
+          }
+        }
+      }, ANIMATION_TIMINGS.HIT_ANIMATION_DELAY);
+
+      return () => clearTimeout(timer);
+    }
+  }, [gameState, currentTurnHits, playAnimation, playSound]);
 
   // Close turn summary when next player throws a dart
   useEffect(() => {
@@ -222,7 +290,7 @@ export default function CricketGame() {
             closeDialog();
             handleNewGame();
           }}
-          className="w-full px-6 py-4 bg-slate-700 text-white rounded-xl hover:bg-slate-600 font-bold text-lg transition-all shadow-lg hover:scale-105"
+          className="w-full px-6 py-4 bg-green-600 text-white rounded-xl hover:bg-green-500 font-bold text-lg transition-all shadow-xl focus:outline-none"
         >
           {t('cricket.game.newGame')}
         </button>
@@ -232,7 +300,7 @@ export default function CricketGame() {
             closeDialog();
             handleQuit();
           }}
-          className="w-full px-6 py-4 bg-red-700 text-white rounded-xl hover:bg-red-600 font-bold text-lg transition-all shadow-lg hover:scale-105"
+          className="w-full px-6 py-4 bg-red-600 text-white rounded-xl hover:bg-red-500 font-bold text-lg transition-all shadow-lg hover:scale-105"
         >
           {t('cricket.game.quit')}
         </button>
@@ -245,8 +313,8 @@ export default function CricketGame() {
   // Loading state
   if (!gameState) {
     return (
-      <div className="flex min-h-screen items-center justify-center">
-        <div className="text-2xl text-white">Chargement...</div>
+      <div className="flex min-h-screen items-center justify-center bg-theme-primary">
+        <div className="text-2xl text-theme-primary">Chargement...</div>
       </div>
     );
   }
@@ -254,7 +322,10 @@ export default function CricketGame() {
   const currentPlayer = gameState.players[gameState.currentPlayerIndex];
 
   return (
-    <main className="h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 flex flex-col px-4 py-3 gap-3 overflow-hidden">
+    <main className="h-screen bg-theme-primary flex flex-col px-4 py-3 gap-3 overflow-hidden">
+      {/* Animations overlay */}
+      <AnimationOverlay />
+
       <GameHeader
         gameMode={gameState.mode}
         connectionState={connectionState}

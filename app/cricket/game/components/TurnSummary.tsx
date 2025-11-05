@@ -34,19 +34,19 @@ export function TurnSummary({
   if (!visible) return null;
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center z-[9999] pointer-events-none">
+    <div data-testid="turn-summary" className="fixed inset-0 flex items-center justify-center z-[9999] pointer-events-none">
       {/* Overlay */}
       <div className="absolute inset-0 bg-black/60 animate-fade-in" />
 
       {/* Summary card */}
       <div className="relative animate-slide-up">
-        <div className="bg-gradient-to-br from-slate-800 to-slate-900 text-white rounded-3xl shadow-2xl p-10 border-4 border-blue-500 min-w-[500px]">
+        <div className="bg-theme-card text-theme-primary rounded-3xl shadow-2xl p-10 border-4 border-accent min-w-[500px]">
           {/* Player name */}
           <div className="text-center mb-6">
-            <h2 className="text-4xl font-bold text-blue-400 mb-2">
+            <h2 className="text-4xl font-bold text-accent mb-2">
               {currentPlayer.player.name}
             </h2>
-            <div className="text-xl text-slate-300">{t('cricket.game.turnCompleted')}</div>
+            <div className="text-xl text-theme-tertiary">{t('cricket.game.turnCompleted')}</div>
           </div>
 
           {/* Hits */}
@@ -54,12 +54,12 @@ export function TurnSummary({
             {hits.map((hit, index) => (
               <div
                 key={index}
-                className="bg-slate-700/80 rounded-xl p-6 min-w-[120px] text-center transform hover:scale-110 transition-transform border border-slate-600"
+                className="bg-theme-interactive rounded-xl p-6 min-w-[120px] text-center transform hover:scale-110 transition-transform border border-theme-card"
                 style={{
                   animation: `slideIn 0.3s ease-out ${index * 0.1}s both`,
                 }}
               >
-                <div className="text-5xl font-black text-cyan-400">
+                <div className="text-5xl font-black text-accent">
                   {hit.ShortName}
                 </div>
               </div>
@@ -68,16 +68,16 @@ export function TurnSummary({
             {Array.from({ length: 3 - hits.length }).map((_, index) => (
               <div
                 key={`empty-${index}`}
-                className="bg-slate-700/30 rounded-xl p-6 min-w-[120px] text-center border-2 border-dashed border-slate-600"
+                className="bg-theme-secondary rounded-xl p-6 min-w-[120px] text-center border-2 border-dashed border-theme-card"
               >
-                <div className="text-5xl font-black text-slate-600">-</div>
+                <div className="text-5xl font-black text-theme-tertiary">-</div>
               </div>
             ))}
           </div>
         </div>
 
         {/* Glow effect */}
-        <div className="absolute inset-0 bg-gradient-to-br from-blue-500 to-cyan-600 rounded-3xl blur-3xl opacity-30 animate-pulse" />
+        <div className="absolute inset-0 bg-accent rounded-3xl blur-3xl opacity-30 animate-pulse" />
       </div>
 
       {/* Custom animations */}

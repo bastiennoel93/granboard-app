@@ -3,6 +3,18 @@
 import { useState } from "react";
 import { useTranslations } from "next-intl";
 import { Player } from "@/services/cricket";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faDice,
+  faBullseye,
+  faPencil,
+  faClipboardList,
+  faCheck,
+  faXmark,
+  faArrowLeft,
+  faArrowUp,
+  faArrowDown
+} from "@fortawesome/free-solid-svg-icons";
 
 interface PlayerOrderDialogProps {
   players: Player[];
@@ -42,22 +54,22 @@ export function PlayerOrderDialog({
 
   if (showManualOrder) {
     return (
-      <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50">
-        <div className="bg-slate-800 rounded-2xl p-8 max-w-2xl w-full mx-4 border-2 border-green-500 shadow-2xl">
+      <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+        <div className="bg-theme-elevated rounded-2xl p-8 max-w-2xl w-full mx-4 border border-theme-card shadow-2xl">
           <div className="flex justify-between items-center mb-6">
-            <h2 className="text-3xl font-bold text-white">
+            <h2 className="text-3xl font-bold text-theme-primary">
               {t('cricket.playerOrder.dialog.manualTitle')}
             </h2>
             <button
               onClick={() => setShowManualOrder(false)}
-              className="text-slate-400 hover:text-white text-2xl"
+              className="text-theme-tertiary hover:text-theme-primary text-2xl"
             >
-              ←
+              <FontAwesomeIcon icon={faArrowLeft} />
             </button>
           </div>
 
-          <div className="mb-6 p-4 bg-blue-900/30 rounded-xl border border-blue-500/50">
-            <p className="text-sm text-blue-300">
+          <div className="mb-6 p-4 bg-accent-bg rounded-xl border border-accent">
+            <p className="text-sm text-accent">
               {t('cricket.playerOrder.dialog.manualSubtitle')}
             </p>
           </div>
@@ -66,13 +78,13 @@ export function PlayerOrderDialog({
             {manualPlayers.map((player, index) => (
               <div
                 key={player.id}
-                className="flex items-center justify-between p-4 bg-slate-700/50 rounded-xl border border-slate-600"
+                className="flex items-center justify-between p-4 bg-theme-card rounded-xl border border-theme-card"
               >
                 <div className="flex items-center gap-4">
-                  <span className="w-10 h-10 flex items-center justify-center text-2xl font-bold text-green-400 bg-slate-800 rounded-full">
+                  <span className="w-10 h-10 flex items-center justify-center text-2xl font-bold text-green-400 bg-theme-secondary rounded-full">
                     {index + 1}
                   </span>
-                  <span className="text-xl font-medium text-white">
+                  <span className="text-xl font-medium text-theme-primary">
                     {player.name}
                   </span>
                 </div>
@@ -82,22 +94,22 @@ export function PlayerOrderDialog({
                     disabled={index === 0}
                     className={`px-3 py-2 rounded-lg font-bold transition-all ${
                       index === 0
-                        ? "bg-slate-700 text-slate-500 cursor-not-allowed"
-                        : "bg-blue-600 text-white hover:bg-blue-500"
+                        ? "bg-theme-interactive text-theme-muted cursor-not-allowed"
+                        : "bg-accent text-white hover:opacity-90"
                     }`}
                   >
-                    ↑
+                    <FontAwesomeIcon icon={faArrowUp} />
                   </button>
                   <button
                     onClick={() => movePlayer(index, "down")}
                     disabled={index === manualPlayers.length - 1}
                     className={`px-3 py-2 rounded-lg font-bold transition-all ${
                       index === manualPlayers.length - 1
-                        ? "bg-slate-700 text-slate-500 cursor-not-allowed"
-                        : "bg-blue-600 text-white hover:bg-blue-500"
+                        ? "bg-theme-interactive text-theme-muted cursor-not-allowed"
+                        : "bg-accent text-white hover:opacity-90"
                     }`}
                   >
-                    ↓
+                    <FontAwesomeIcon icon={faArrowDown} />
                   </button>
                 </div>
               </div>
@@ -106,9 +118,9 @@ export function PlayerOrderDialog({
 
           <button
             onClick={handleValidateManualOrder}
-            className="w-full px-8 py-4 bg-gradient-to-r from-green-600 to-green-700 text-white rounded-xl hover:from-green-500 hover:to-green-600 transition-all font-bold text-xl shadow-lg"
+            className="w-full px-8 py-4 bg-green-700 text-white rounded-xl hover:bg-green-600 transition-all font-bold text-xl shadow-lg flex items-center justify-center gap-2"
           >
-            ✓ {t('cricket.playerOrder.dialog.confirm')}
+            <FontAwesomeIcon icon={faCheck} /> {t('cricket.playerOrder.dialog.confirm')}
           </button>
         </div>
       </div>
@@ -116,22 +128,22 @@ export function PlayerOrderDialog({
   }
 
   return (
-    <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50">
-      <div className="bg-slate-800 rounded-2xl p-8 max-w-2xl w-full mx-4 border-2 border-green-500 shadow-2xl">
+    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+      <div className="bg-theme-elevated rounded-2xl p-8 max-w-2xl w-full mx-4 border border-theme-card shadow-2xl">
         <div className="flex justify-between items-center mb-6">
-          <h2 className="text-3xl font-bold text-white">
+          <h2 className="text-3xl font-bold text-theme-primary">
             {t('cricket.playerOrder.dialog.title')}
           </h2>
           <button
             onClick={onClose}
-            className="text-slate-400 hover:text-white text-2xl"
+            className="text-theme-tertiary hover:text-theme-primary text-2xl transition-colors"
           >
-            ×
+            <FontAwesomeIcon icon={faXmark} />
           </button>
         </div>
 
-        <div className="mb-6 p-4 bg-blue-900/30 rounded-xl border border-blue-500/50">
-          <p className="text-sm text-blue-300">
+        <div className="mb-6 p-4 bg-theme-secondary rounded-xl border border-theme-card">
+          <p className="text-sm text-theme-primary font-medium">
             {t('cricket.playerOrder.dialog.subtitle')}
           </p>
         </div>
@@ -143,10 +155,10 @@ export function PlayerOrderDialog({
               const shuffled = [...players].sort(() => Math.random() - 0.5);
               onOrderSet(shuffled);
             }}
-            className="w-full p-6 bg-gradient-to-r from-purple-600 to-purple-700 text-white rounded-xl hover:from-purple-500 hover:to-purple-600 transition-all shadow-lg text-left"
+            className="w-full p-6 bg-purple-700 text-white rounded-xl hover:bg-purple-600 transition-all shadow-lg text-left"
           >
             <div className="flex items-center gap-4">
-              <span className="text-4xl">🎲</span>
+              <FontAwesomeIcon icon={faDice} className="text-4xl w-12 h-12" />
               <div>
                 <div className="text-xl font-bold">{t('cricket.playerOrder.dialog.randomOrder')}</div>
                 <div className="text-sm text-purple-200">
@@ -162,13 +174,13 @@ export function PlayerOrderDialog({
               onThrowForOrder();
               onClose();
             }}
-            className="w-full p-6 bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-xl hover:from-blue-500 hover:to-blue-600 transition-all shadow-lg text-left"
+            className="w-full p-6 bg-accent text-white rounded-xl hover:opacity-90 transition-all shadow-lg text-left"
           >
             <div className="flex items-center gap-4">
-              <span className="text-4xl">🎯</span>
+              <FontAwesomeIcon icon={faBullseye} className="text-4xl w-12 h-12" />
               <div>
                 <div className="text-xl font-bold">{t('cricket.playerOrder.dialog.throwForOrder')}</div>
-                <div className="text-sm text-blue-200">
+                <div className="text-sm text-accent">
                   {t('cricket.playerOrder.dialog.throwForOrderDesc')}
                 </div>
               </div>
@@ -178,10 +190,10 @@ export function PlayerOrderDialog({
           <button
             data-testid="order-manual-button"
             onClick={() => setShowManualOrder(true)}
-            className="w-full p-6 bg-gradient-to-r from-green-600 to-green-700 text-white rounded-xl hover:from-green-500 hover:to-green-600 transition-all shadow-lg text-left"
+            className="w-full p-6 bg-green-700 text-white rounded-xl hover:bg-green-600 transition-all shadow-lg text-left"
           >
             <div className="flex items-center gap-4">
-              <span className="text-4xl">✏️</span>
+              <FontAwesomeIcon icon={faPencil} className="text-4xl w-12 h-12" />
               <div>
                 <div className="text-xl font-bold">{t('cricket.playerOrder.dialog.manualOrder')}</div>
                 <div className="text-sm text-green-200">
@@ -197,13 +209,13 @@ export function PlayerOrderDialog({
               onOrderSet(players);
               onClose();
             }}
-            className="w-full p-6 bg-slate-700 text-white rounded-xl hover:bg-slate-600 transition-all shadow-lg text-left border-2 border-slate-600"
+            className="w-full p-6 bg-slate-600 text-white rounded-xl hover:bg-slate-500 transition-all shadow-lg text-left"
           >
             <div className="flex items-center gap-4">
-              <span className="text-4xl">📋</span>
+              <FontAwesomeIcon icon={faClipboardList} className="text-4xl w-12 h-12" />
               <div>
                 <div className="text-xl font-bold">{t('cricket.playerOrder.dialog.currentOrder')}</div>
-                <div className="text-sm text-slate-300">
+                <div className="text-sm text-slate-200">
                   {t('cricket.playerOrder.dialog.currentOrderDesc')}
                 </div>
               </div>

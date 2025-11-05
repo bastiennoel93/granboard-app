@@ -24,6 +24,12 @@
       "label": "Volume",
       "enableSoundFirst": "Enable sound to adjust volume"
     },
+    "theme": {
+      "label": "Theme",
+      "light": "Light",
+      "dark": "Dark",
+      "system": "System"
+    },
     "language": {
       "label": "Language"
     }
@@ -172,6 +178,79 @@
         "retry": "Retry",
         "confirm": "Confirm Order"
       }
+    }
+  },
+  "zeroOne": {
+    "title": "01",
+    "subtitle": "Setup",
+    "players": {
+      "title": "Players",
+      "placeholder": "Player name",
+      "count": "{count} player",
+      "count_plural": "{count} players",
+      "minRequired": "Add at least 2 players to start the game"
+    },
+    "gameMode": {
+      "title": "Starting Score",
+      "short": "Short game",
+      "standard": "Standard game",
+      "long": "Long game"
+    },
+    "options": {
+      "title": "Options",
+      "doubleOut": {
+        "title": "Double Out",
+        "description": "Must finish exactly on 0 with a double"
+      }
+    },
+    "rounds": {
+      "title": "Number of Rounds",
+      "description": "rounds per game (0 = unlimited)"
+    },
+    "rules": {
+      "title": "01 Rules",
+      "common": [
+        "Start with a score of 301, 501 or 701",
+        "Subtract your points from the remaining score",
+        "First to reach exactly 0 wins",
+        "If you go below 0 or land on 1, it's a 'bust' and your turn is lost"
+      ],
+      "doubleOut": {
+        "title": "Double Out:",
+        "rules": [
+          "You MUST finish on a double to win",
+          "Finishing on anything other than a double is a 'bust'"
+        ]
+      }
+    },
+    "errors": {
+      "minPlayers": "You need at least 2 players to start!",
+      "connectionFailed": "Failed to connect to Granboard. Make sure it's powered on and try again."
+    },
+    "game": {
+      "round": "Round",
+      "rounds": "rounds",
+      "remaining": "Remaining",
+      "average": "Average",
+      "darts": "Darts",
+      "quit": "Quit",
+      "settings": "Settings",
+      "newGame": "New Game",
+      "gameStats": "Game Statistics"
+    },
+    "legend": {
+      "title": "Legend & Rules",
+      "close": "Close",
+      "objectiveTitle": "Objective",
+      "objectiveDesc": "Subtract your points from the starting score to reach exactly 0",
+      "ppdTitle": "PPD (Points Per Dart)",
+      "ppdDesc": "Average points scored per dart (Total points scored ÷ Number of darts thrown)",
+      "averageTitle": "Average",
+      "averageDesc": "Average points scored per 3-dart turn",
+      "bustTitle": "Bust",
+      "bustDesc": "If you go below 0 or land on 1, it's a bust. Your turn is lost and your score remains unchanged.",
+      "doubleOutTitle": "Double Out",
+      "doubleOutDesc": "When enabled, you MUST finish on a double to win. Finishing on anything other than a double is a bust."
     }
   }
 }

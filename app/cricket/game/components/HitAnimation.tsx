@@ -30,16 +30,16 @@ export function HitAnimation({ hit, onComplete }: HitAnimationProps) {
 
       {/* Hit display */}
       <div className="relative animate-bounce-scale">
-        <div className="bg-gradient-to-br from-slate-800 to-slate-900 text-white rounded-3xl shadow-2xl p-16 border-4 border-cyan-500">
+        <div className="bg-theme-card text-theme-primary rounded-3xl shadow-2xl p-16 border-4 border-accent">
           <div className="text-center">
-            <div className="text-9xl font-black text-cyan-400">
+            <div className="text-9xl font-black text-accent">
               {hit.ShortName}
             </div>
           </div>
         </div>
 
         {/* Glow effect */}
-        <div className="absolute inset-0 bg-gradient-to-br from-cyan-500 to-blue-600 rounded-3xl blur-3xl opacity-40 animate-pulse" />
+        <div className="absolute inset-0 bg-accent rounded-3xl blur-3xl opacity-40 animate-pulse" />
       </div>
     </div>
   );

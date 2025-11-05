@@ -1,3 +1,6 @@
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faXmark, faVolumeHigh, faVolumeMute } from "@fortawesome/free-solid-svg-icons";
+
 interface SettingsDialogProps {
   show: boolean;
   onClose: () => void;
@@ -35,7 +38,7 @@ export function SettingsDialog({
             onClick={onClose}
             className="text-slate-400 hover:text-white text-2xl font-bold px-3 py-1 hover:bg-slate-800 rounded-lg transition-colors"
           >
-            ✕
+            <FontAwesomeIcon icon={faXmark} />
           </button>
         </div>
 
@@ -44,8 +47,8 @@ export function SettingsDialog({
           {onToggleSound && (
             <div className="bg-slate-800/50 rounded-xl p-4 border border-slate-700">
               <div className="flex items-center justify-between">
-                <label className="text-white font-bold text-base">
-                  {soundEnabled ? "🔊" : "🔇"} Son
+                <label className="text-white font-bold text-base flex items-center gap-2">
+                  <FontAwesomeIcon icon={soundEnabled ? faVolumeHigh : faVolumeMute} /> Son
                 </label>
                 <button
                   onClick={onToggleSound}
@@ -65,10 +68,10 @@ export function SettingsDialog({
           {onVolumeChange && (
             <div className="bg-slate-800/50 rounded-xl p-4 border border-slate-700">
               <div className="flex items-center justify-between mb-3">
-                <label className="text-white font-bold text-base">
-                  🔊 Volume
+                <label className="text-white font-bold text-base flex items-center gap-2">
+                  <FontAwesomeIcon icon={faVolumeHigh} /> Volume
                 </label>
-                <span className="text-cyan-400 font-bold text-sm">
+                <span className="text-accent font-bold text-sm">
                   {Math.round(volume * 100)}%
                 </span>
               </div>
@@ -85,16 +88,16 @@ export function SettingsDialog({
                   [&::-webkit-slider-thumb]:appearance-none
                   [&::-webkit-slider-thumb]:w-4
                   [&::-webkit-slider-thumb]:h-4
-                  [&::-webkit-slider-thumb]:bg-cyan-500
+                  [&::-webkit-slider-thumb]:bg-accent
                   [&::-webkit-slider-thumb]:rounded-full
                   [&::-webkit-slider-thumb]:cursor-pointer
-                  [&::-webkit-slider-thumb]:hover:bg-cyan-400
+                  [&::-webkit-slider-thumb]:hover:opacity-90
                   [&::-moz-range-thumb]:w-4
                   [&::-moz-range-thumb]:h-4
-                  [&::-moz-range-thumb]:bg-cyan-500
+                  [&::-moz-range-thumb]:bg-accent
                   [&::-moz-range-thumb]:rounded-full
                   [&::-moz-range-thumb]:cursor-pointer
-                  [&::-moz-range-thumb]:hover:bg-cyan-400
+                  [&::-moz-range-thumb]:hover:opacity-90
                   [&::-moz-range-thumb]:border-0"
               />
               {!soundEnabled && (
@@ -129,7 +132,7 @@ export function SettingsDialog({
         <div className="p-6 pt-4 border-t border-slate-700">
           <button
             onClick={onClose}
-            className="w-full px-6 py-3 bg-cyan-600 text-white rounded-xl hover:bg-cyan-500 font-bold transition-all shadow-lg"
+            className="w-full px-6 py-3 bg-accent text-white rounded-xl hover:opacity-90 font-bold transition-all shadow-lg"
           >
             Annuler
           </button>

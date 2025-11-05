@@ -1,18 +1,18 @@
 import { useState, useRef, useEffect } from "react";
-import { CricketGameState, cloneGameState } from "@/services/cricket";
 import { Segment } from "@/services/boardinfo";
 
-type GameHistoryEntry = {
-  gameState: CricketGameState;
+type GameHistoryEntry<T> = {
+  gameState: T;
   turnHits: Segment[];
 };
 
-export function useGameHistory(
-  gameState: CricketGameState | null,
-  currentTurnHits: Segment[]
+export function useGameHistory<T extends { dartsThrown: number; currentPlayerIndex: number }>(
+  gameState: T | null,
+  currentTurnHits: Segment[],
+  cloneFn: (state: T) => T
 ) {
-  const [gameHistory, setGameHistory] = useState<GameHistoryEntry[]>([]);
-  const previousGameStateRef = useRef<CricketGameState | null>(null);
+  const [gameHistory, setGameHistory] = useState<GameHistoryEntry<T>[]>([]);
+  const previousGameStateRef = useRef<T | null>(null);
   const previousTurnHitsRef = useRef<Segment[]>([]);
   const isRestoringRef = useRef<boolean>(false);
 
@@ -23,7 +23,7 @@ export function useGameHistory(
     // Don't save to history if we're restoring a previous state
     if (isRestoringRef.current) {
       isRestoringRef.current = false;
-      previousGameStateRef.current = cloneGameState(gameState);
+      previousGameStateRef.current = cloneFn(gameState);
       previousTurnHitsRef.current = [...currentTurnHits];
       return;
     }
@@ -31,7 +31,7 @@ export function useGameHistory(
     // If we have a previous state, save it to history
     if (previousGameStateRef.current) {
       // IMPORTANT: Capture the values BEFORE updating the refs to avoid React Strict Mode issues
-      const stateToSave = cloneGameState(previousGameStateRef.current);
+      const stateToSave = cloneFn(previousGameStateRef.current);
       const hitsToSave = [...previousTurnHitsRef.current];
 
       setGameHistory((prev) =>
@@ -46,7 +46,7 @@ export function useGameHistory(
     }
 
     // Update previous state reference (will be saved next time)
-    previousGameStateRef.current = cloneGameState(gameState);
+    previousGameStateRef.current = cloneFn(gameState);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [gameState?.dartsThrown, gameState?.currentPlayerIndex]);
 
@@ -55,7 +55,7 @@ export function useGameHistory(
   };
 
   const undoLastAction = (): {
-    gameState: CricketGameState;
+    gameState: T;
     turnHits: Segment[];
   } | null => {
     if (gameHistory.length === 0) return null;

@@ -28,7 +28,7 @@ export function LanguageSelector() {
         data-testid="language-selector-button"
         onClick={() => setIsOpen(!isOpen)}
         disabled={isPending}
-        className="px-4 py-2 bg-slate-700 text-slate-300 hover:bg-slate-600 rounded-lg transition-all flex items-center gap-2"
+        className="px-4 py-2 bg-theme-interactive text-theme-interactive hover:bg-theme-interactive-hover rounded-lg transition-all flex items-center gap-2"
       >
         <span className="uppercase font-medium">{locale}</span>
         <svg
@@ -57,7 +57,7 @@ export function LanguageSelector() {
           />
 
           {/* Dropdown */}
-          <div data-testid="language-dropdown" className="absolute right-0 top-full mt-2 z-50 bg-slate-700 rounded-lg shadow-xl border border-slate-600 overflow-hidden min-w-[150px]">
+          <div data-testid="language-dropdown" className="absolute right-0 top-full mt-2 z-50 bg-theme-card rounded-lg shadow-xl border border-theme-card overflow-hidden min-w-[150px]">
             {locales.map((loc) => (
               <button
                 key={loc}
@@ -66,17 +66,17 @@ export function LanguageSelector() {
                 disabled={isPending}
                 className={`w-full px-4 py-3 text-left transition-all flex items-center gap-3 ${
                   locale === loc
-                    ? "bg-slate-600 text-white font-medium"
-                    : "text-slate-300 hover:bg-slate-600"
+                    ? "bg-theme-interactive text-theme-primary font-medium"
+                    : "text-theme-secondary hover:bg-theme-interactive"
                 }`}
               >
-                <span className="uppercase text-sm font-bold text-slate-400">
+                <span className="uppercase text-sm font-bold text-theme-muted">
                   {loc}
                 </span>
                 <span className="flex-1">{localeNames[loc]}</span>
                 {locale === loc && (
                   <svg
-                    className="w-5 h-5 text-green-400"
+                    className="w-5 h-5 text-accent"
                     fill="currentColor"
                     viewBox="0 0 20 20"
                   >

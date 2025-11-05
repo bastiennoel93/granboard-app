@@ -1,10 +1,13 @@
 import { useTranslations } from "next-intl";
 import { CricketGameMode } from "@/services/cricket";
+import { ZeroOneMode } from "@/services/zeroone";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faBook, faGear, faCheck } from "@fortawesome/free-solid-svg-icons";
 
 type ConnectionState = "déconnecté" | "connexion" | "connecté" | "erreur";
 
 interface GameHeaderProps {
-  gameMode: CricketGameMode;
+  gameMode: CricketGameMode | ZeroOneMode;
   connectionState: ConnectionState;
   onConnect: () => void;
   onShowLegend?: () => void;
@@ -20,19 +23,33 @@ export function GameHeader({
 }: GameHeaderProps) {
   const t = useTranslations();
 
+  // Determine if it's a ZeroOne mode
+  const isZeroOneMode = typeof gameMode === 'number' && (gameMode === 301 || gameMode === 501 || gameMode === 701);
+
   return (
     <div className="flex justify-between items-center">
       <div>
-        <h1 className="text-3xl font-bold text-white tracking-wider">
-          CRICKET
-          {gameMode === CricketGameMode.CutThroat ? (
-            <span className="text-red-400 font-semibold text-base ml-3">
-              {t('cricket.gameMode.cutThroat.title')}
-            </span>
+        <h1 className="text-3xl font-bold text-theme-primary tracking-wider">
+          {isZeroOneMode ? (
+            <>
+              01
+              <span className="text-accent font-semibold text-base ml-3">
+                {gameMode}
+              </span>
+            </>
           ) : (
-            <span className="text-blue-400 font-semibold text-base ml-3">
-              {t('cricket.gameMode.standard.title')}
-            </span>
+            <>
+              CRICKET
+              {gameMode === CricketGameMode.CutThroat ? (
+                <span className="text-red-400 font-semibold text-base ml-3">
+                  {t('cricket.gameMode.cutThroat.title')}
+                </span>
+              ) : (
+                <span className="text-accent font-semibold text-base ml-3">
+                  {t('cricket.gameMode.standard.title')}
+                </span>
+              )}
+            </>
           )}
         </h1>
       </div>
@@ -41,32 +58,32 @@ export function GameHeader({
           <button
             data-testid="legend-button"
             onClick={onShowLegend}
-            className="px-4 py-2 bg-slate-700 text-white rounded-lg hover:bg-slate-600 text-sm font-medium transition-all shadow-lg"
+            className="px-4 py-2 bg-theme-interactive text-theme-interactive bg-theme-interactive-hover rounded-lg text-sm font-medium transition-all shadow-lg flex items-center gap-2"
             title={t('cricket.game.showLegend')}
           >
-            📖 {t('cricket.game.legend')}
+            <FontAwesomeIcon icon={faBook} /> {t('cricket.game.legend')}
           </button>
         )}
         {onShowSettings && (
           <button
             data-testid="settings-button"
             onClick={onShowSettings}
-            className="px-4 py-2 bg-slate-700 text-white rounded-lg hover:bg-slate-600 text-sm font-medium transition-all shadow-lg"
+            className="px-4 py-2 bg-theme-interactive text-theme-interactive bg-theme-interactive-hover rounded-lg text-sm font-medium transition-all shadow-lg flex items-center gap-2"
             title={t('cricket.game.settings')}
           >
-            ⚙️ {t('cricket.game.settings')}
+            <FontAwesomeIcon icon={faGear} /> {t('cricket.game.settings')}
           </button>
         )}
         {connectionState === "connecté" ? (
-          <div data-testid="connection-status" className="px-4 py-2 bg-green-600 text-white rounded-lg font-medium text-sm shadow-lg">
-            ✓ {t('cricket.game.connected')}
+          <div data-testid="connection-status" className="px-4 py-2 bg-green-600 text-white rounded-lg font-medium text-sm shadow-lg flex items-center gap-2">
+            <FontAwesomeIcon icon={faCheck} /> {t('cricket.game.connected')}
           </div>
         ) : (
           <button
             data-testid="connect-button"
             onClick={onConnect}
             disabled={connectionState === "connexion"}
-            className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-500 text-sm font-medium disabled:bg-slate-700 transition-all shadow-lg"
+            className="px-4 py-2 bg-accent text-white rounded-lg hover:opacity-90 text-sm font-medium disabled:bg-theme-interactive transition-all shadow-lg"
           >
             {connectionState === "connexion"
               ? t('cricket.game.connecting')

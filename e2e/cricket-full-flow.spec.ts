@@ -49,13 +49,13 @@ test.describe('Cricket Full Game Flow', () => {
     await expect(page.getByTestId('current-round-1')).toBeVisible();
 
     // 8. Simuler un changement de joueur
-    const firstPlayer = await page.locator('h2 span.text-green-400').textContent();
+    const firstPlayer = await page.locator('h2 span.text-accent').textContent();
     await page.getByTestId('next-player-button').click();
 
     // Attendre le changement
     await page.waitForTimeout(500);
 
-    const secondPlayer = await page.locator('h2 span.text-green-400').textContent();
+    const secondPlayer = await page.locator('h2 span.text-accent').textContent();
     expect(secondPlayer).not.toBe(firstPlayer);
 
     // 9. Tester les fonctionnalités de la dialog
